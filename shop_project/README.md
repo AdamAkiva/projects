@@ -11,27 +11,27 @@
 ---
 ### **The main Window of the program:**
 
-![Main Window look like this](https://raw.githubusercontent.com/AdamAkiva/studies_projects/master/java/java_course/shop_project/images/main_window.JPG)
+![Main Window look like this](https://github.com/AdamAkiva/projects/blob/master/shop_project/images/main_window.JPG?raw=true)
 
 ---
 ### **The Add Customer Window of the program:**
 
-![Add Customer Window look like this](https://raw.githubusercontent.com/AdamAkiva/studies_projects/master/java/java_course/shop_project/images/add_customer_window.JPG)
+![Add Customer Window look like this](https://github.com/AdamAkiva/projects/blob/master/shop_project/images/add_customer_window.JPG?raw=true)
 
 ---
 ### **The Add Product Window of the program:**
 
-![Add Product Window look like this](https://raw.githubusercontent.com/AdamAkiva/studies_projects/master/java/java_course/shop_project/images/add_product_window.JPG)
+![Add Product Window look like this](https://github.com/AdamAkiva/projects/blob/master/shop_project/images/add_product_window.JPG?raw=true)
 
 ---
 ### **The Remove Product Window of the program:**
 
-![Remove Product Window look like this](https://raw.githubusercontent.com/AdamAkiva/studies_projects/master/java/java_course/shop_project/images/remove_product_window.JPG)
+![Remove Product Window look like this](https://github.com/AdamAkiva/projects/blob/master/shop_project/images/remove_product_window.JPG?raw=true)
 
 ---
 ### **The Display Customers Window of the program:**
 
-![Display Customers Window look like this](https://raw.githubusercontent.com/AdamAkiva/studies_projects/master/java/java_course/shop_project/images/display_customers_window.JPG)
+![Display Customers Window look like this](https://github.com/AdamAkiva/projects/blob/master/shop_project/images/display_customers_window.JPG?raw=true)
 
 ---
 ### **The Undo Button follows the memento pattern to undo a previous product inserion with a stack**
@@ -39,7 +39,7 @@
 ---
 ### **Dialog window to indicate a function was successfull or there was an error:**
 
-![Dialog view look like this](https://raw.githubusercontent.com/AdamAkiva/studies_projects/master/java/java_course/shop_project/images/dialog_window.JPG)
+![Dialog view look like this](https://github.com/AdamAkiva/projects/blob/master/shop_project/images/dialog_window.JPG?raw=true)
 
 ---
 ## Where to find each design pattern:
