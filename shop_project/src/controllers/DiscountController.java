@@ -6,7 +6,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import models.Customer;
 import models.CustomerModel;
-import views.BaseView;
 import views.DiscountView;
 
 /**
@@ -26,10 +25,8 @@ public class DiscountController extends BaseController implements IUserAction {
     public DiscountController(CustomerModel model) {
         this.model = model;
         this.view = new DiscountView();
-    }
-    
-    public BaseView getView() {
-        return view;
+        
+        view.attachButtonEvent(view.getBtnShowCustomers(), showCustomers());
     }
     
     public Parent buildView() {

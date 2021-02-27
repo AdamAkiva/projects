@@ -17,6 +17,7 @@ import views.DialogView;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -47,6 +48,13 @@ public class AddProductController extends BaseController implements IUserAction 
         this.customerModel = customerModel;
         this.customers = this.customerModel.getCustomers();
         this.view = new AddProductView(customers);
+        
+        view.attachButtonEvent(view.getBtnSubmit(), submitButtonAction(new ArrayList<>() {{
+            add(view.getTfId());
+            add(view.getTfProductName());
+            add(view.getTfProductShopPrice());
+            add(view.getTfProductCustomerPrice());
+        }}, view.getLvCustomers()));
     }
     
     public BaseView getView() {
@@ -69,13 +77,6 @@ public class AddProductController extends BaseController implements IUserAction 
         productModel.saveState();
     }
     
-    /**
-     * Method used to restore the previous state of the ProductModel
-     */
-    public void restoreState() {
-        productModel.restoreState();
-    }
-    
     public Parent buildView() {
         return view.buildView();
     }
@@ -92,13 +93,17 @@ public class AddProductController extends BaseController implements IUserAction 
         // Putting a new value with the same key will replace the old one, hence doing what was asked
         return actionEvent -> {
             try {
-                if (checkFieldValidation(tfFields.get(0), PRODUCT_ID_REGEX, null, CANT_BE_EMPTY_ERROR_MESSAGE) &&
-                        checkFieldValidation(tfFields.get(1), PRODUCT_NAME_REGEX, null, CANT_BE_EMPTY_ERROR_MESSAGE) &&
-                        checkFieldValidation(tfFields.get(2), PRODUCT_SHOP_PRICE_REGEX, "0", "") &&
-                        checkFieldValidation(tfFields.get(3), PRODUCT_CUSTOMER_PRICE_REGEX, "0", "")) {
+                boolean validProductId = checkFieldValidation(tfFields.get(0), PRODUCT_ID_REGEX, false, CANT_BE_EMPTY_ERROR_MESSAGE);
+                boolean validProductName = checkFieldValidation(tfFields.get(1), PRODUCT_NAME_REGEX, false, CANT_BE_EMPTY_ERROR_MESSAGE);
+                boolean validProductShopPrice = checkFieldValidation(tfFields.get(2), PRODUCT_SHOP_PRICE_REGEX, true, "");
+                boolean validProductCustomerPrice = checkFieldValidation(tfFields.get(3), PRODUCT_CUSTOMER_PRICE_REGEX, true, "");
+                if (validProductId && validProductName && validProductShopPrice && validProductCustomerPrice) {
                     saveState();
                     id = tfFields.get(0).getText();
-                    product = new Product(tfFields.get(1).getText(), tfFields.get(2).getText(), tfFields.get(3).getText());
+                    String name = tfFields.get(1).getText();
+                    String shopPrice = tfFields.get(2).getText().isEmpty() ? "0" : tfFields.get(2).getText();
+                    String customerPrice = tfFields.get(3).getText().isEmpty() ? "0" : tfFields.get(3).getText();
+                    product = new Product(name, shopPrice, customerPrice);
                     Iterator<Customer> itr = customers.iterator();
                     int i = 0;
                     Customer customer = null;

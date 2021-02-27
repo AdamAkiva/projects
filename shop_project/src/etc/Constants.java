@@ -28,7 +28,7 @@ public abstract class Constants {
     public static final int INSERT = 2;
     
     public static final String PRODUCT_ID_REGEX = "^(?=\\s*\\S).*$";
-    public static final String PRODUCT_NAME_REGEX = "^[a-zA-Z0-9 ]*$";
+    public static final String PRODUCT_NAME_REGEX = "^[a-zA-Z0-9 ]+$";
     public static final String PRODUCT_SHOP_PRICE_REGEX = "^[1-9]\\d*$";
     public static final String PRODUCT_CUSTOMER_PRICE_REGEX = PRODUCT_SHOP_PRICE_REGEX;
     

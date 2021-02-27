@@ -11,15 +11,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Customer;
 import models.CustomerModel;
 import models.ProductModel;
-
-import java.util.ArrayList;
 
 import static etc.Constants.*;
 
@@ -83,11 +80,6 @@ public class Main extends Application {
         final Button btnAddCustomer = new Button("Add Customer");
         btnAddCustomer.setOnAction(actionEvent -> {
             final AddCustomerController addCustomerController = new AddCustomerController(customerModel);
-            final AddCustomerView addCustomerView = (AddCustomerView) addCustomerController.getView();
-            addCustomerView.attachButtonEvent(addCustomerView.getBtnSubmit(), addCustomerController.submitButtonAction(new ArrayList<TextField>() {{
-                add(addCustomerView.getTfCustomerName());
-                add(addCustomerView.getTfCustomerPhoneNumber());
-            }}, addCustomerView.getCbDiscount()));
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(primaryStage);
@@ -108,13 +100,6 @@ public class Main extends Application {
         btnAddProductButton.setOnAction(actionEvent -> {
             if (!customerModel.getCustomers().isEmpty()) {
                 final AddProductController addProductController = new AddProductController(productModel, customerModel);
-                final AddProductView addProductView = (AddProductView) addProductController.getView();
-                addProductView.attachButtonEvent(addProductView.getBtnSubmit(), addProductController.submitButtonAction(new ArrayList<TextField>() {{
-                    add(addProductView.getTfId());
-                    add(addProductView.getTfProductName());
-                    add(addProductView.getTfProductShopPrice());
-                    add(addProductView.getTfProductCustomerPrice());
-                }}, addProductView.getLvCustomers()));
                 Stage stage = new Stage();
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.initOwner(primaryStage);
@@ -138,11 +123,6 @@ public class Main extends Application {
         btnShowProduct.setOnAction(actionEvent -> {
             if (!productModel.getMap().isEmpty()) {
                 final RemoveProductController removeProductController = new RemoveProductController(productModel);
-                final RemoveProductView removeProductView = (RemoveProductView) removeProductController.getView();
-                removeProductView.attachButtonEvent(removeProductView.getBtnRemove(),
-                        removeProductController.removeSingleProduct());
-                removeProductView.attachButtonEvent(removeProductView.getBtnRemoveAll(), removeProductController.removeAllProducts());
-                removeProductView.geTTotalProfit().setText(String.valueOf(removeProductController.getTotalProfit()));
                 Stage stage = new Stage();
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.initOwner(primaryStage);
@@ -166,8 +146,6 @@ public class Main extends Application {
         btnDiscountButton.setOnAction(actionEvent -> {
             if (!customerModel.getCustomers().isEmpty()) {
                 final DiscountController discountController = new DiscountController(customerModel);
-                final DiscountView discountView = (DiscountView) discountController.getView();
-                discountView.attachButtonEvent(discountView.getBtnShowCustomers(), discountController.showCustomers());
                 Stage stage = new Stage();
                 stage.initModality(Modality.NONE);
                 stage.initOwner(primaryStage);

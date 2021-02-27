@@ -4,7 +4,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
-import views.BaseView;
 
 /**
  * @author Adam Akiva
@@ -19,11 +18,6 @@ public abstract class BaseController {
     public abstract Parent buildView();
     
     /**
-     * @return BaseView object holding the view object
-     */
-    public abstract BaseView getView();
-    
-    /**
      * A method used to validate a field with the given regex
      * @param textField TextField object to validate
      * @param regex String holding a regex to match with the text of the TextField
@@ -32,12 +26,11 @@ public abstract class BaseController {
      *
      * @return True if valid, false if not
      */
-    public boolean checkFieldValidation(final TextField textField, final String regex, final String defaultValue, final String errorMessage) {
+    public boolean checkFieldValidation(final TextField textField, final String regex, final boolean defaultValue, final String errorMessage) {
         if (textField.getText().matches(regex)) {
             return true;
         }
-        if (textField.getText().isEmpty() && defaultValue != null) {
-            textField.setText(defaultValue);
+        if (textField.getText().isEmpty() && defaultValue) {
             return true;
         }
         textField.setText(errorMessage);

@@ -9,7 +9,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Product;
 import models.ProductModel;
-import views.BaseView;
 import views.DialogView;
 import views.RemoveProductView;
 
@@ -35,10 +34,10 @@ public class RemoveProductController extends BaseController implements IUserActi
     public RemoveProductController(ProductModel model) {
         this.model = model;
         this.view = new RemoveProductView(this.model.getMap());
-    }
     
-    public BaseView getView() {
-        return view;
+        view.attachButtonEvent(view.getBtnRemove(), removeSingleProduct());
+        view.attachButtonEvent(view.getBtnRemoveAll(), removeAllProducts());
+        view.geTTotalProfit().setText(String.valueOf(getTotalProfit()));
     }
     
     /**

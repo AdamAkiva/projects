@@ -13,9 +13,9 @@ import javafx.stage.Stage;
 import models.Customer;
 import models.CustomerModel;
 import views.AddCustomerView;
-import views.BaseView;
 import views.DialogView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static etc.Constants.*;
@@ -37,6 +37,10 @@ public class AddCustomerController extends BaseController implements IUserAction
     public AddCustomerController(CustomerModel model) {
         this.model = model;
         this.view = new AddCustomerView();
+        view.attachButtonEvent(view.getBtnSubmit(), submitButtonAction(new ArrayList<>() {{
+            add(view.getTfCustomerName());
+            add(view.getTfCustomerPhoneNumber());
+        }}, view.getCbDiscount()));
     }
     
     /**
@@ -51,10 +55,6 @@ public class AddCustomerController extends BaseController implements IUserAction
         return view.buildView();
     }
     
-    public BaseView getView() {
-        return view;
-    }
-    
     /**
      * Method used to for creating the action for the submit button in the view that this controller represent
      * @param tfFields List of TextFields for all the TextFields in the view to check if they are valid
@@ -65,9 +65,14 @@ public class AddCustomerController extends BaseController implements IUserAction
     public EventHandler<ActionEvent> submitButtonAction(final List<TextField> tfFields, CheckBox cbBox) {
         return actionEvent -> {
             try {
-                if (checkFieldValidation(tfFields.get(0), CUSTOMER_NAME_REGEX, null, CUSTOMER_NAME_ERROR_MESSAGE) &&
-                        checkFieldValidation(tfFields.get(1), CUSTOMER_PHONE_NUMBER_REGEX, null, CUSTOMER_PHONE_NUMBER_ERROR_MESSAGE)) {
-                    customer = new Customer(tfFields.get(0).getText(), tfFields.get(1).getText(), cbBox.isSelected());
+                boolean validName = checkFieldValidation(tfFields.get(0), CUSTOMER_NAME_REGEX, false, CUSTOMER_NAME_ERROR_MESSAGE);
+                boolean validPhoneNumber = checkFieldValidation(tfFields.get(1), CUSTOMER_PHONE_NUMBER_REGEX, false,
+                        CUSTOMER_PHONE_NUMBER_ERROR_MESSAGE);
+                if (validName && validPhoneNumber) {
+                    String name = tfFields.get(0).getText();
+                    String phoneNumber = tfFields.get(1).getText();
+                    boolean discounts = cbBox.isSelected();
+                    customer = new Customer(name, phoneNumber, discounts);
                     execute();
                     if (customer.getDiscounts()) {
                         model.addObserver(customer);

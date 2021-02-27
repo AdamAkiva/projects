@@ -3,9 +3,6 @@ package models;
 import etc.IDiscount;
 import etc.InvalidConstructorException;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static etc.Constants.CUSTOMER_NAME_REGEX;
 
 /**
@@ -14,7 +11,6 @@ import static etc.Constants.CUSTOMER_NAME_REGEX;
 public class Customer implements IDiscount, Comparable<Customer> {
     
     private final boolean discounts;  // Indicates whether the customer is interested in new discounts
-    private final List<Product> discountedProducts; // Used to hold a list of discounted products
     private String name; // Used to hold the name of the customer
     private int phoneNumber; // Used to hold the customer phone number
     
@@ -29,7 +25,6 @@ public class Customer implements IDiscount, Comparable<Customer> {
         setName(name);
         setPhoneNumber(phoneNumber);
         this.discounts = discounts;
-        this.discountedProducts = new ArrayList<>();
     }
     
     public String getName() {
@@ -64,10 +59,6 @@ public class Customer implements IDiscount, Comparable<Customer> {
         return discounts;
     }
     
-    public List<Product> getDiscountedProducts() {
-        return discountedProducts;
-    }
-    
     @Override
     public int hashCode() {
         return name.hashCode() + phoneNumber;
@@ -93,7 +84,6 @@ public class Customer implements IDiscount, Comparable<Customer> {
     @Override
     public Customer update(Object o) {
         if (o instanceof Product && discounts) {
-            discountedProducts.add((Product) o);
             return this;
         }
         return null;
