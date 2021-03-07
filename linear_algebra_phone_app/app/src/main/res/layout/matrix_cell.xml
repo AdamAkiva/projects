@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llMatrixCell"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
+
+    <EditText
+        android:id="@+id/etMatrixCell"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:textSize="13sp"
+        android:inputType="numberDecimal"
+        android:textAlignment="center"
+        android:hint="@string/number"
+        android:autofillHints="@string/number"
+        android:maxLength="5" />
+
+</LinearLayout>
