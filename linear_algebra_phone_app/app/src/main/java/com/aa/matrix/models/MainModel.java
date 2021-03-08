@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 public class MainModel {
 
     private Matrix matrix;
+    private Vector freeColumn;
 
     public static MainModel instance;
 
@@ -18,35 +19,23 @@ public class MainModel {
         return instance;
     }
 
+    public void setMatrix(Matrix matrix) {
+        this.matrix = matrix;
+    }
+
+    public void setFreeColumn(Vector freeColumn) {
+        this.freeColumn = freeColumn;
+    }
+
     public Matrix getMatrix() {
-        if (matrix != null) {
-            return matrix;
-        }
-        return null;
+        return matrix;
     }
 
-    public ArrayList<MatrixSnapShot> getMatrixSnapShots() {
+    public Vector getFreeColumn() {
+        return freeColumn;
+    }
+
+    public MatrixSnapShots getMatrixSnapShots() {
         return matrix.getMatrixSnapShots();
-    }
-
-    public String calculateDeterminant(String[] matrixValues, int rows, int columns)
-            throws ExecutionException, InterruptedException {
-        matrix = Matrix.convertStringArrayToMatrix(matrixValues, rows, columns);
-        Determinant determinant = new Determinant(matrix);
-        return BaseActivity.getService().submit(determinant).get();
-    }
-
-    public Vector calculateGaussJorden(String[] matrixValues, int rows, int columns, Vector freeVector)
-            throws ExecutionException, InterruptedException {
-        matrix = Matrix.convertStringArrayToMatrix(matrixValues, rows, columns);
-        GaussJorden gaussJorden = new GaussJorden(matrix, freeVector);
-        return BaseActivity.getService().submit(gaussJorden).get();
-    }
-
-    public Matrix calculateInverseMatrix(String[] matrixValues, int rows, int columns)
-            throws ExecutionException, InterruptedException {
-        matrix = Matrix.convertStringArrayToMatrix(matrixValues, rows, columns);
-        InverseMatrix inverseMatrix = new InverseMatrix(matrix);
-        return BaseActivity.getService().submit(inverseMatrix).get();
     }
 }

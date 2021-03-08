@@ -4,6 +4,7 @@ import com.aa.matrix.etc.DivideByZeroException;
 import com.aa.matrix.etc.InvalidParameterException;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static com.aa.matrix.views.BaseActivity.CHANGE_ROW_BY_PIVOT;
 import static com.aa.matrix.views.BaseActivity.DIVIDE_BY_ZERO_ERROR;
@@ -28,37 +29,15 @@ public class Matrix {
     private int[] swapArray;
     private int determinantOuterValues;
 
-    private final ArrayList<MatrixSnapShot> matrixSnapShots;
-    private int snapShotIndex;
+    private final MatrixSnapShots snapShots;
 
-    public Matrix(final double[][] matrix, final int rowsCount, final int columnCount) {
+    public Matrix(final double[][] matrix, final int rowsCount, final int columnCount) throws InvalidParameterException {
         this.matrix = matrix;
         this.rowsCount = rowsCount;
         this.columnCount = columnCount;
         this.diagonalLineSize = rowsCount;
         this.determinantOuterValues = ONE;
-        matrixSnapShots = new ArrayList<MatrixSnapShot>();
-        snapShotIndex = ZERO;
-    }
-
-    public Matrix(final Vector[] vectors, final int vectorsNumber) throws
-            InvalidParameterException {
-        matrix = new double[vectorsNumber][];
-        for (int i = 0; i < vectorsNumber; i++) {
-            this.matrix[i] = vectors[i].getVectorAsArray();
-        }
-        this.rowsCount = vectorsNumber;
-        this.columnCount = vectors[ZERO].getVectorAsArray().length;
-        int i;
-        for (i = 0; i < vectors.length; i++) {
-            if (!vectors[i].equalSize(vectors[i + ONE])) {
-                throw new InvalidParameterException(VECTORS_SIZE_ERROR);
-            }
-        }
-        this.diagonalLineSize = rowsCount;
-        this.determinantOuterValues = ONE;
-        matrixSnapShots = new ArrayList<MatrixSnapShot>();
-        snapShotIndex = ZERO;
+        snapShots = new MatrixSnapShots(this);
     }
 
     public Matrix(final Matrix matrix) {
@@ -78,26 +57,11 @@ public class Matrix {
         if (swapArray != null) {
             this.swapArray = matrix.getSwapArray();
         }
-        this.matrixSnapShots = matrix.getMatrixSnapShots();
-
-        // When you get a chance look why this is required instead of without an if
-        if (matrix.getMatrixSnapShots().size() == ZERO) {
-            this.snapShotIndex = ZERO;
-        } else {
-            this.snapShotIndex = matrix.getMatrixSnapShots().size() - 1;
-        }
+        this.snapShots = matrix.getMatrixSnapShots();
     }
 
     public void setPivot(Pivot pivot) {
         this.pivot = pivot;
-    }
-
-    public Vector[] getAsVectorsArray() {
-        final Vector[] vectors = new Vector[rowsCount];
-        for (int i = 0; i < rowsCount; i++) {
-            vectors[i] = new Vector(matrix[i]);
-        }
-        return vectors;
     }
 
     public double[][] getMatrix() {
@@ -128,8 +92,8 @@ public class Matrix {
         return swapArray;
     }
 
-    public ArrayList<MatrixSnapShot> getMatrixSnapShots() {
-        return matrixSnapShots;
+    public MatrixSnapShots getMatrixSnapShots() {
+        return snapShots;
     }
 
     public void transposeMatrix() throws InvalidParameterException {
@@ -140,8 +104,7 @@ public class Matrix {
             }
         }
         this.matrix = matrix;
-        matrixSnapShots.add(snapShotIndex++, new MatrixSnapShot(this,
-                new MatrixAction(TRANSPOSE)));
+        snapShots.put(new MatrixAction(TRANSPOSE), this);
     }
 
     public void divideMatrixRowByValue(int row, double value) throws DivideByZeroException,
@@ -153,8 +116,7 @@ public class Matrix {
                     matrix[row][i] /= value;
                 }
             }
-            matrixSnapShots.add(snapShotIndex++, new MatrixSnapShot(this,
-                    new MatrixAction(MULTIPLICATION, value, row)));
+            snapShots.put(new MatrixAction(MULTIPLICATION, value, row), this);
         } else {
             throw new DivideByZeroException(DIVIDE_BY_ZERO_ERROR);
         }
@@ -181,8 +143,8 @@ public class Matrix {
                     matrix[swapArray[i]] = matrix[i];
                     matrix[i] = tempArr;
                     determinantOuterValues *= NEGATIVE_ONE;
-                    matrixSnapShots.add(snapShotIndex++, new MatrixSnapShot(this,
-                            new MatrixAction(SWAP, i + ONE, swapArray[i] + ONE)));
+                    snapShots.put(new MatrixAction(SWAP, i + ONE, swapArray[i] + ONE),
+                            this);
                 }
             }
         }
@@ -197,7 +159,7 @@ public class Matrix {
         for (int i = pivotRow + ONE, k = 0; i < rowsCount; i++, k++) {
             final double multiplicationNumber = matrix[i][pivotColumn] * NEGATIVE_ONE / pivotValue;
             multiplicationNumbers[k] = multiplicationNumber;
-            if (multiplicationNumber !=  ZERO_DOUBLE &&
+            if (multiplicationNumber != ZERO_DOUBLE &&
                     multiplicationNumber != NEGATIVE_ZERO_DOUBLE) {
                 for (int j = pivotColumn; j < columnCount; j++) {
                     if (matrix[pivotRow][j] != ZERO) {
@@ -205,9 +167,8 @@ public class Matrix {
                                 matrix[i][j] + matrix[pivotRow][j] * multiplicationNumber;
                     }
                 }
-                matrixSnapShots.add(snapShotIndex++, new MatrixSnapShot(this,
-                        new MatrixAction(CHANGE_ROW_BY_PIVOT,Math.abs(multiplicationNumber),
-                                i + ONE, pivotRow + ONE)));
+                snapShots.put(new MatrixAction(CHANGE_ROW_BY_PIVOT, 1 / multiplicationNumber,
+                        i + ONE, pivotRow + ONE), this);
             }
         }
         return multiplicationNumbers;
@@ -216,21 +177,21 @@ public class Matrix {
     public double[] changeRowReversedByPivot(Pivot pivot) throws InvalidParameterException {
         final int pivotRow = pivot.getRow();
         final int pivotColumn = pivot.getColumn();
-        final double [] multiplicationNumbers = new double[pivotRow];
+        final double[] multiplicationNumbers = new double[pivotRow];
         for (int i = pivotRow - ONE; i >= 0; i--) {
             if (matrix[i][pivotColumn] != ZERO_DOUBLE) {
                 final double multiplicationNumber = matrix[i][pivotColumn] * NEGATIVE_ONE;
                 multiplicationNumbers[i] = multiplicationNumber;
                 matrix[i][pivotColumn] += multiplicationNumber;
-                matrixSnapShots.add(snapShotIndex++, new MatrixSnapShot(this,
-                        new MatrixAction(CHANGE_ROW_BY_PIVOT, Math.abs(multiplicationNumber),
-                                i + ONE, pivotRow + ONE)));
+                snapShots.put(new MatrixAction(CHANGE_ROW_BY_PIVOT, Math.abs(multiplicationNumber),
+                        i + ONE, pivotRow + ONE), this);
             }
         }
         return multiplicationNumbers;
     }
 
-    public static Matrix convertStringArrayToMatrix(String[] matrixValuesString, int rows, int columns) {
+    public static Matrix convertStringArrayToMatrix(String[] matrixValuesString, int rows, int columns)
+            throws InvalidParameterException {
         final double[][] matrixValues = new double[rows][columns];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
@@ -240,15 +201,14 @@ public class Matrix {
         return new Matrix(matrixValues, rows, columns);
     }
 
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder();
-        for (int i = 0; i < rowsCount; i++) {
-            for (int j = 0; j < columnCount; j++) {
-                str.append(String.format("[%s] ", Vector.roundDoubleValue(matrix[i][j])));
+    public static String[] convertMatrixToStringArray(double[][] matrix, int columns) {
+        int rows = matrix.length / columns;
+        String[] result = new String[columns * rows];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                result[j + (i * rows)] = String.valueOf(matrix[i][j]);
             }
-            str.append("\n");
         }
-        return str.toString();
+        return result;
     }
 }

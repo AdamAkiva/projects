@@ -11,7 +11,7 @@ import static com.aa.matrix.views.BaseActivity.ONE;
 import static com.aa.matrix.views.BaseActivity.ZERO;
 import static com.aa.matrix.views.BaseActivity.ZERO_DOUBLE;
 
-public class Determinant implements Callable<String> {
+public class Determinant implements Callable<String[]> {
 
     private final Matrix matrix;
 
@@ -20,9 +20,9 @@ public class Determinant implements Callable<String> {
     }
 
     @Override
-    public String call() throws Pivot.NotFoundException, DivideByZeroException, InvalidParameterException {
+    public String[] call() throws Pivot.NotFoundException, DivideByZeroException, InvalidParameterException {
         if (checkForZeroVectorInMatrix()) {
-            return Vector.roundDoubleValue(DEFAULT_DETERMINANT_VALUE);
+            return new Vector(new double[] {DEFAULT_DETERMINANT_VALUE}).getVectorAsStringArray();
         } else {
             rankMatrix();
             double res = ONE;
@@ -31,9 +31,9 @@ public class Determinant implements Callable<String> {
             }
             if (res ==  ZERO_DOUBLE ||
                     res == NEGATIVE_ZERO_DOUBLE) {
-                return String.valueOf(ZERO);
+                return new Vector(new double[] {ZERO_DOUBLE}).getVectorAsStringArray();
             }
-            return Vector.roundDoubleValue(res * matrix.getDeterminantOuterValues());
+            return new Vector(new double[] {res * matrix.getDeterminantOuterValues()}).getVectorAsStringArray();
         }
     }
 

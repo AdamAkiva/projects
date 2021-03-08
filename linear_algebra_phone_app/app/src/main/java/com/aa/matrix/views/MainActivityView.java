@@ -3,6 +3,7 @@ package com.aa.matrix.views;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,9 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aa.matrix.R;
-import com.aa.matrix.controllers.FreeColumnRowController;
-import com.aa.matrix.controllers.MainActivityViewController;
-import com.aa.matrix.etc.CustomAdapter;
+import com.aa.matrix.controllers.MainActivityController;
+import com.aa.matrix.etc.InputMatrixAdapter;
 
 
 public class MainActivityView extends BaseActivity {
@@ -50,18 +50,17 @@ public class MainActivityView extends BaseActivity {
         etMatrixRows = (EditText) findViewById(R.id.etMatrixRows);
         llMatrixLayout = (LinearLayout) findViewById(R.id.llMatrixLayout);
         llFillZeroes = (LinearLayout) findViewById(R.id.llFillZeroes);
-        tvDeterminantValue = (TextView) findViewById(R.id.tvDeterminantValue);
-        rvMatrix = (RecyclerView) findViewById(R.id.rvMatrix);
+        rvMatrix = (RecyclerView) findViewById(R.id.rvInputMatrix);
         btnDeterminant = (Button) findViewById(R.id.btnDeterminant);
         btnGauss = (Button) findViewById(R.id.btnGauss);
-        btnReverses = (Button) findViewById(R.id.btnReverse);
+        btnReverses = (Button) findViewById(R.id.btnInverse);
         cbFillZeroes = (CheckBox) findViewById(R.id.cbFillZeroes);
 
         attachEvents();
     }
 
     public void attachEvents() {
-        MainActivityViewController controller = new MainActivityViewController(this);
+        MainActivityController controller = new MainActivityController(this);
         rlMainActivity.setOnFocusChangeListener(controller.buildHideKeyboardListener());
         etMatrixColumns.setOnEditorActionListener(controller.buildMatrixActionOnDonePress());
         etMatrixRows.setOnFocusChangeListener(controller.buildMatrixActionOnFocusChange());
@@ -90,16 +89,7 @@ public class MainActivityView extends BaseActivity {
         }
     }
 
-    public void hideResults(FreeColumnRowController controller) {
-        if (tvDeterminantValue.getVisibility() == View.VISIBLE) {
-            tvDeterminantValue.setVisibility(View.INVISIBLE);
-        }
-        if (controller != null) {
-            controller.hide();
-        }
-    }
-
-    public void buildMatrixView(CustomAdapter adapter, GridLayoutManager layoutManager) {
+    public void buildMatrixView(InputMatrixAdapter adapter, GridLayoutManager layoutManager) {
         if (llMatrixLayout.getVisibility() == View.INVISIBLE || llMatrixLayout.getVisibility() == View.GONE) {
             llMatrixLayout.setVisibility(View.VISIBLE);
         }
@@ -113,5 +103,11 @@ public class MainActivityView extends BaseActivity {
                 ErrorTextView.removeErrorTextView(MainActivityView.this, rlMainActivity, errorField);
             }
         }
+    }
+
+    public void goToResultActivity(int opn) {
+        Intent intent = new Intent(this, DisplayResultActivityView.class);
+        intent.putExtra(OPERATION, opn);
+        startActivity(intent);
     }
 }

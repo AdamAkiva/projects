@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Matrix</string>
+    <string name="app_name">Linear Algebra</string>
     <string name="mainActivityTitle">Enter a matrix</string>
     <string name="matrix">Matrix:</string>
     <string name="row">Row</string>
@@ -7,7 +7,7 @@
     <string name="number">Number</string>
     <string name="determinant">Determinant</string>
     <string name="gauss">Gauss</string>
-    <string name="reverse">Reverse</string>
+    <string name="inverse">Inverse</string>
     <string name="fillWithZeroes">Fill empty cells with Zeroes?</string>
     <string name="dynamicFreeVariableId">etFreeVar</string>
     <string name="submit">Submit</string>

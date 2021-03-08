@@ -102,10 +102,22 @@ public class Vector {
         return false;
     }
 
+    public String[] getVectorAsStringArray() {
+        String[] result = new String[vector.length];
+        for (int i = 0; i < getVectorAsArray().length; i++) {
+            String val = Vector.roundDoubleValue(getVectorAsArray()[i]);
+            if (val.equals(NEGATIVE_ZERO)) {
+                val = val.replace(MINUS, " ");
+            }
+            result[i] = val;
+        }
+        return result;
+    }
+
     @Override
     public String toString() {
-        StringBuilder s = new StringBuilder();
-        s.append("{");
+        StringBuilder sb = new StringBuilder();
+        sb.append("{ ");
         String val;
         for (int i = 0; i < getVectorAsArray().length; i++) {
             val = Vector.roundDoubleValue(getVectorAsArray()[i]);
@@ -113,15 +125,15 @@ public class Vector {
                 val = val.replace(MINUS, " ");
             }
             if (i != getVectorAsArray().length - ONE) {
-                s.append(String.format("(%s:%s),", VECTOR_VARIABLE.concat(String.valueOf(i)), val));
-                if (s.length() > VECTOR_MAX_NUMBER_OF_CHARACTERS_IN_LINE) {
-                    s.append("\n");
+                sb.append(String.format("(%s:%s),", VECTOR_VARIABLE.concat(String.valueOf(i)), val));
+                if (sb.length() > VECTOR_MAX_NUMBER_OF_CHARACTERS_IN_LINE) {
+                    sb.append("\n");
                 }
             } else {
-                s.append(String.format("(%s:%s)", VECTOR_VARIABLE.concat(String.valueOf(i)), val));
+                sb.append(String.format("(%s:%s)", VECTOR_VARIABLE.concat(String.valueOf(i)), val));
             }
         }
-        s.append("}");
-        return s.toString();
+        sb.append(" }");
+        return sb.toString();
     }
 }

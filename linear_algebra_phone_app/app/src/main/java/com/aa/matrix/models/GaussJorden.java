@@ -9,7 +9,7 @@ import static com.aa.matrix.views.BaseActivity.NO_SWITCH_VALUE;
 import static com.aa.matrix.views.BaseActivity.ONE;
 import static com.aa.matrix.views.BaseActivity.ZERO;
 
-public class GaussJorden implements Callable<Vector> {
+public class GaussJorden implements Callable<String[]> {
 
     private final Matrix matrix;
     private final Vector freeColumn;
@@ -20,7 +20,7 @@ public class GaussJorden implements Callable<Vector> {
     }
 
     @Override
-    public Vector call() throws Pivot.NotFoundException,
+    public String[] call() throws Pivot.NotFoundException,
             DivideByZeroException, InvalidParameterException {
         canonicalRanking();
         if (matrix.getSwapArray() != null) {
@@ -33,7 +33,7 @@ public class GaussJorden implements Callable<Vector> {
                 }
             }
         }
-        return freeColumn;
+        return freeColumn.getVectorAsStringArray();
     }
 
     private void rankMatrix() throws Pivot.NotFoundException,

@@ -16,14 +16,14 @@ import static com.aa.matrix.views.BaseActivity.SWAPPED_ROW;
 import static com.aa.matrix.views.BaseActivity.ZERO;
 import static com.aa.matrix.views.BaseActivity.ZERO_DOUBLE;
 
-public class InverseMatrix implements Callable<Matrix> {
+public class InverseMatrix implements Callable<String[]> {
 
     private final Matrix matrix;
     private final Matrix unitMatrix;
 
     private final StringBuilder stepByStep;
 
-    public InverseMatrix(final Matrix matrix) {
+    public InverseMatrix(final Matrix matrix) throws InvalidParameterException {
         this.matrix = new Matrix(matrix);
         this.unitMatrix = createMatchingUnitMatrix();
         this.stepByStep = new StringBuilder();
@@ -33,7 +33,7 @@ public class InverseMatrix implements Callable<Matrix> {
         return matrix;
     }
 
-    private Matrix createMatchingUnitMatrix() {
+    private Matrix createMatchingUnitMatrix() throws InvalidParameterException {
         final double[][] unitMatrix =
                 new double[matrix.getRowsCount()][matrix.getColumnCount()];
         for (int i = 0; i < matrix.getRowsCount(); i++) {
@@ -167,9 +167,9 @@ public class InverseMatrix implements Callable<Matrix> {
     }
 
     @Override
-    public Matrix call() throws DivideByZeroException, Pivot.NotFoundException, InvalidParameterException {
+    public String[] call() throws DivideByZeroException, Pivot.NotFoundException, InvalidParameterException {
         canonicalRanking(unitMatrix);
-        return unitMatrix;
+        return Matrix.convertMatrixToStringArray(unitMatrix.getMatrix(), unitMatrix.getColumnCount());
     }
 
     @Override

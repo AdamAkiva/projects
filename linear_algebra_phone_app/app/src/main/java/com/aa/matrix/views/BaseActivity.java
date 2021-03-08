@@ -2,6 +2,7 @@ package com.aa.matrix.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             "callable interface";
     public static final String SOMETHING_WENT_WRONG = "Something went wrong please try again";
 
+    public static final String START_MATRIX = "Inputted matrix:";
+
     public static final int SWAP = 1;
     public static final int ADDITION = 2;
     public static final int MULTIPLICATION = 3;
@@ -69,11 +72,21 @@ public abstract class BaseActivity extends AppCompatActivity {
     public static final String ROW_NUMBER_MUST_BE_POSITIVE = "Inputted Row number must be positive";
 
     public static final String DESCRIBE_TRANSPOSE_MATRIX = "Transposed the matrix";
-    public static final String DESCRIBE_SWAP_ACTION_PATTERN = "Swapped row number: %s with row number: %s";
-    public static final String DESCRIBE_ADDITION_ACTION_PATTERN = "Added row number: %s to row number: %s";
-    public static final String DESCRIBE_MULTIPLICATION_ACTION_PATTERN = "Multiplied row number: %s by: %s";
-    public static final String DESCRIBE_CHANGE_ROW_BY_PIVOT_PATTERN = "Multiplied row number: %s by: %s and" +
-            " added it to row: %s";
+    public static final String DESCRIBE_SWAP_ACTION_PATTERN = "Swapped row %s with row %s";
+    public static final String DESCRIBE_ADDITION_ACTION_PATTERN = "Added row %s to row %s";
+    public static final String DESCRIBE_MULTIPLICATION_ACTION_PATTERN = "Multiplied row %s by %s";
+    public static final String DESCRIBE_CHANGE_ROW_BY_PIVOT_PATTERN = "Multiplied row %s by %s"
+            + System.lineSeparator() + "and added it to row %s";
+
+    public static final int DETERMINANT = 1;
+    public static final int GAUSS_JORDEN = 2;
+    public static final int INVERSE_MATRIX = 3;
+
+    public static final String OPERATION = "Operation: ";
+
+    public static final String STEP = "Step";
+    public static final String SNAP_SHOT_SEPARATOR = System.lineSeparator() +
+            "------------------------------------------------------" + System.lineSeparator();
 
     public static ExecutorService getService() {
         return service;
@@ -89,9 +102,5 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public static float dpToPixels(float dp, Context context) {
         return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-    }
-
-    public static float pixelsToDp(float pixels, Context context) {
-        return pixels / ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 }

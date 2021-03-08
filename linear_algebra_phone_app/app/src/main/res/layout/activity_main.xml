@@ -81,7 +81,7 @@
         android:visibility="gone" >
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvMatrix"
+            android:id="@+id/rvInputMatrix"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -156,13 +156,13 @@
             android:visibility="invisible"/>
 
         <Button style="@android:style/Widget.DeviceDefault.Button.Borderless"
-            android:id="@+id/btnReverse"
+            android:id="@+id/btnInverse"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:text="@string/reverse"
+            android:text="@string/inverse"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textSize="14sp"
@@ -181,38 +181,5 @@
         android:layout_marginEnd="30dp"
         android:layout_below="@id/llCalculationOptions"
         android:visibility="gone"/>
-
-    <LinearLayout
-        android:id="@+id/llResult"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:layout_below="@id/llFreeColumnRow">
-
-        <TextView
-            android:id="@+id/tvDeterminantValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="14sp"
-            android:layout_gravity="center"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tvVectorValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="14sp"
-            android:layout_gravity="center"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
-    </LinearLayout>
 
 </RelativeLayout>

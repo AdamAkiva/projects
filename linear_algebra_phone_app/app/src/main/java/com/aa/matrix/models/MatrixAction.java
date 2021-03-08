@@ -19,7 +19,7 @@ public class MatrixAction {
     private final int firstRow;
     private final int secondRow;
 
-    public MatrixAction(int action) throws  InvalidParameterException{
+    public MatrixAction(int action) throws InvalidParameterException{
         if (action == TRANSPOSE) {
             this.action = action;
         } else {
