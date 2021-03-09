@@ -25,8 +25,6 @@ public class MainActivityView extends BaseActivity {
     private LinearLayout llMatrixLayout;
     private LinearLayout llFillZeroes;
 
-    private TextView tvDeterminantValue;
-
     private EditText etMatrixColumns;
     private EditText etMatrixRows;
 

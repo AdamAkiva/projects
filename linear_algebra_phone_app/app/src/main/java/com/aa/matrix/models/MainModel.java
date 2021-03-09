@@ -8,9 +8,9 @@ import java.util.concurrent.ExecutionException;
 public class MainModel {
 
     private Matrix matrix;
-    private Vector freeColumn;
+    // private Vector freeColumn;
 
-    public static MainModel instance;
+    private static MainModel instance;
 
     public static MainModel getInstance() {
         if (instance == null) {
@@ -23,19 +23,15 @@ public class MainModel {
         this.matrix = matrix;
     }
 
-    public void setFreeColumn(Vector freeColumn) {
-        this.freeColumn = freeColumn;
-    }
+//    public void setFreeColumn(Vector freeColumn) {
+//        this.freeColumn = freeColumn;
+//    }
 
     public Matrix getMatrix() {
         return matrix;
     }
 
-    public Vector getFreeColumn() {
-        return freeColumn;
-    }
-
-    public MatrixSnapShots getMatrixSnapShots() {
-        return matrix.getMatrixSnapShots();
-    }
+//    public Vector getFreeColumn() {
+//        return freeColumn;
+//    }
 }

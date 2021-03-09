@@ -9,15 +9,10 @@ import androidx.annotation.Nullable;
 
 import com.aa.matrix.R;
 import com.aa.matrix.controllers.DisplayResultActivityController;
-import com.aa.matrix.models.MatrixSnapShots;
-
-import java.util.Locale;
-import java.util.Map;
+import com.aa.matrix.models.CalculationResult;
 
 
 public class DisplayResultActivityView extends BaseActivity {
-
-    private DisplayResultActivityController controller;
 
     private ProgressBar pbLoadingResult;
     private TextView tvDisplayResult;
@@ -34,9 +29,9 @@ public class DisplayResultActivityView extends BaseActivity {
         }
 
         pbLoadingResult = (ProgressBar) findViewById(R.id.pbLoadingResult);
-        tvDisplayResult = (TextView) findViewById(R.id.tvDisplayResult);
+        tvDisplayResult = (TextView) findViewById(R.id.tvResult);
 
-        controller = new DisplayResultActivityController(this, opn);
+        new DisplayResultActivityController(this, opn);
     }
 
     public void hideProgressBar() {
@@ -45,19 +40,18 @@ public class DisplayResultActivityView extends BaseActivity {
         }
     }
 
-    public void displayDeterminantResult(String[] result, MatrixSnapShots snapShots) {
-        displayMatrixSnapShots(snapShots);
+    public void displayDeterminantResult(CalculationResult result) {
+        String textToDisplay = result.toString();
+        tvDisplayResult.setText(textToDisplay);
     }
 
-    public void displayGaussJordenResult(String[] result, MatrixSnapShots snapShots) {
-        displayMatrixSnapShots(snapShots);
+    public void displayGaussJordanResult(CalculationResult result) {
+        String textToDisplay = result.toString();
+        tvDisplayResult.setText(textToDisplay);
     }
 
-    public void displayInverseMatrixResult(String[] result, MatrixSnapShots snapShots) {
-        displayMatrixSnapShots(snapShots);
-    }
-
-    private void displayMatrixSnapShots(MatrixSnapShots snapShots) {
-        tvDisplayResult.setText(snapShots.toString());
+    public void displayInverseMatrixResult(CalculationResult result) {
+        String textToDisplay = result.toString();
+        tvDisplayResult.setText(textToDisplay);
     }
 }

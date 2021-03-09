@@ -4,16 +4,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import androidx.annotation.Nullable;
-
 import com.aa.matrix.R;
 import com.aa.matrix.etc.InvalidParameterException;
-import com.aa.matrix.models.Determinant;
-import com.aa.matrix.models.GaussJorden;
-import com.aa.matrix.models.InverseMatrix;
+import com.aa.matrix.models.CalculateDeterminant;
+import com.aa.matrix.models.CalculateGaussJordan;
+import com.aa.matrix.models.CalculateInverseMatrix;
+import com.aa.matrix.models.CalculationResult;
 import com.aa.matrix.models.MainModel;
 import com.aa.matrix.models.Matrix;
-import com.aa.matrix.models.Vector;
 import com.aa.matrix.views.BaseActivity;
 import com.aa.matrix.views.DisplayResultActivityView;
 
@@ -21,18 +19,15 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
 import static com.aa.matrix.views.BaseActivity.DETERMINANT;
-import static com.aa.matrix.views.BaseActivity.GAUSS_JORDEN;
+import static com.aa.matrix.views.BaseActivity.GAUSS_JORDAN;
 import static com.aa.matrix.views.BaseActivity.INVERSE_MATRIX;
 
 public class DisplayResultActivityController {
-
-    private final MainModel model = MainModel.getInstance();
 
     private final DisplayResultActivityView view;
     private final ProgressBar pbLoadingResult;
 
     private final Matrix matrix;
-    private final Vector freeColumn;
     private final int matrixOperation;
 
     private static final String TAG = DisplayResultActivityController.class.getName();
@@ -40,8 +35,7 @@ public class DisplayResultActivityController {
     public DisplayResultActivityController(DisplayResultActivityView view, int matrixOperation) {
         this.view = view;
         pbLoadingResult = (ProgressBar) view.findViewById(R.id.pbLoadingResult);
-        this.matrix = model.getMatrix();
-        this.freeColumn = model.getFreeColumn();
+        this.matrix = MainModel.getInstance().getMatrix();
         this.matrixOperation = matrixOperation;
         try {
             displayResult();
@@ -50,30 +44,30 @@ public class DisplayResultActivityController {
         }
     }
 
-    public void displayResult()
-            throws InvalidParameterException, ExecutionException, InterruptedException {
-        String[] result = startCalculation();
+    public void displayResult() throws ExecutionException, InterruptedException,
+            InvalidParameterException {
+        CalculationResult result = startCalculation();
         view.hideProgressBar();
         if (matrixOperation == DETERMINANT) {
-            view.displayDeterminantResult(result, matrix.getMatrixSnapShots());
-        } else if (matrixOperation == GAUSS_JORDEN && freeColumn != null) {
-            view.displayGaussJordenResult(result, matrix.getMatrixSnapShots());
+            view.displayDeterminantResult(result);
+        } else if (matrixOperation == GAUSS_JORDAN) {
+            view.displayGaussJordanResult(result);
         } else if (matrixOperation == INVERSE_MATRIX) {
-            view.displayInverseMatrixResult(result, matrix.getMatrixSnapShots());
+            view.displayInverseMatrixResult(result);
         } else {
             throw new InvalidParameterException("Should not happen");
         }
     }
 
-    private String[] startCalculation()
-            throws InvalidParameterException, ExecutionException, InterruptedException {
-        Callable<String[]> result;
+    private CalculationResult startCalculation() throws ExecutionException, InterruptedException,
+            InvalidParameterException {
+        Callable<CalculationResult> result;
         if (matrixOperation == DETERMINANT) {
-            result = new Determinant(matrix);
-        } else if (matrixOperation == GAUSS_JORDEN && freeColumn != null) {
-            result = new GaussJorden(matrix, freeColumn);
+            result = new CalculateDeterminant(matrix.getMatrix(), matrix.getRowsCount(), matrix.getColumnCount());
+        } else if (matrixOperation == GAUSS_JORDAN) {
+            result = new CalculateGaussJordan(matrix.getMatrix(), matrix.getRowsCount(), matrix.getColumnCount());
         } else if (matrixOperation == INVERSE_MATRIX) {
-            result = new InverseMatrix(matrix);
+            result = new CalculateInverseMatrix(matrix.getMatrix(), matrix.getRowsCount(), matrix.getColumnCount());
         } else {
             throw new InvalidParameterException("Should not happen");
         }

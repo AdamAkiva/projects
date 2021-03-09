@@ -2,11 +2,10 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/llDisplayResults"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_marginTop="50dp"
-    android:layout_gravity="center_horizontal"
-    android:background="@android:color/holo_green_light">
+    android:layout_gravity="center_horizontal">
 
         <ProgressBar
             android:id="@+id/pbLoadingResult"
@@ -18,14 +17,20 @@
             android:minHeight="50dp"
             android:minWidth="200dp"/>
 
-        <TextView
-            android:id="@+id/tvDisplayResult"
-            android:layout_width="wrap_content"
+        <ScrollView
+                android:id="@+id/svResult"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:scrollHorizontally="true"
-            android:scrollbars="vertical"/>
+                android:scrollbars="vertical">
+
+                <TextView
+                    android:id="@+id/tvResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black" />
+
+        </ScrollView>
 
 </LinearLayout>
