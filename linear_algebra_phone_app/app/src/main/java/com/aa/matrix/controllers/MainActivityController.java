@@ -3,9 +3,7 @@ package com.aa.matrix.controllers;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -67,40 +65,17 @@ public class MainActivityController {
         llMatrixLayout = ((Activity) this.context).findViewById(R.id.llMatrixLayout);
     }
 
-    public TextView.OnEditorActionListener buildMatrixActionOnDonePress() {
-        return new TextView.OnEditorActionListener() {
+    public View.OnClickListener buildOnSubmitMatrixSizeListener() {
+        return new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) ||
-                        actionId == EditorInfo.IME_ACTION_DONE) {
-                    try {
-                        hideError(errorField);
-                        if (checkIfMatrixCanBeBuilt()) {
-                            buildMatrixView();
-                            showButtons();
-                        }
-                    } catch (final NumberFormatException e) {
-                        Log.d(TAG, e.getMessage() != null ? e.getMessage() : "null");
-                    }
-                }
-                return false;
-            }
-        };
-    }
-
-    public View.OnFocusChangeListener buildMatrixActionOnFocusChange() {
-        return new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                hideError(errorField);
+            public void onClick(View v) {
                 try {
-                    if (!hasFocus && checkIfMatrixCanBeBuilt()) {
+                    if (checkIfMatrixCanBeBuilt()) {
+                        hideError(errorField);
                         buildMatrixView();
                         showButtons();
                     }
-                } catch (final NumberFormatException e) {
-                    Log.d(TAG, e.getMessage() != null ? e.getMessage() : "null");
-                }
+                } catch (InvalidParameterException ignored) {}
             }
         };
     }
@@ -178,9 +153,22 @@ public class MainActivityController {
         };
     }
 
-    private boolean checkIfMatrixCanBeBuilt() {
-        return etMatrixRows.getText().toString().length() > 0
-                && etMatrixColumns.getText().toString().length() > 0;
+    private boolean checkIfMatrixCanBeBuilt() throws InvalidParameterException {
+        int rows = Integer.parseInt(etMatrixRows.getText().toString());
+        int cols = Integer.parseInt(etMatrixColumns.getText().toString());
+        String errorMessage = "";
+        if (rows <= 5 && rows > 0) {
+            if (cols <= 5 && cols > 0) {
+                return true;
+            } else {
+                errorMessage += "Rows must be between 1 to 5";
+            }
+        } else {
+            errorMessage += "Columns must be between 1 to 5";
+        }
+        errorField = ErrorTextView.displayErrorTextView(view, errorMessage, rlMainActivity,
+                llMatrixLayout.getId());
+        return false;
     }
 
     private void getRowAndColumnsValues() throws NumberFormatException {

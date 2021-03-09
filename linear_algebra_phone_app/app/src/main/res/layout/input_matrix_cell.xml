@@ -10,7 +10,7 @@
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:textSize="13sp"
-        android:inputType="numberDecimal"
+        android:inputType="numberDecimal|numberSigned"
         android:textAlignment="center"
         android:hint="@string/number"
         android:autofillHints="@string/number"

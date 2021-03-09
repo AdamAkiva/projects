@@ -61,13 +61,13 @@ public class DisplayResultActivityController {
 
     private CalculationResult startCalculation() throws ExecutionException, InterruptedException,
             InvalidParameterException {
-        Callable<CalculationResult> result;
+        Callable<CalculationResult> result = null;
         if (matrixOperation == DETERMINANT) {
             result = new CalculateDeterminant(matrix.getMatrix(), matrix.getRowsCount(), matrix.getColumnCount());
         } else if (matrixOperation == GAUSS_JORDAN) {
-            result = new CalculateGaussJordan(matrix.getMatrix(), matrix.getRowsCount(), matrix.getColumnCount());
+//            result = new CalculateGaussJordan(matrix.getMatrix(), matrix.getRowsCount(), matrix.getColumnCount());
         } else if (matrixOperation == INVERSE_MATRIX) {
-            result = new CalculateInverseMatrix(matrix.getMatrix(), matrix.getRowsCount(), matrix.getColumnCount());
+//            result = new CalculateInverseMatrix(matrix.getMatrix(), matrix.getRowsCount(), matrix.getColumnCount());
         } else {
             throw new InvalidParameterException("Should not happen");
         }

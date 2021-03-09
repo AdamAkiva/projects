@@ -79,7 +79,7 @@ public class CalculateDeterminant implements Callable<CalculationResult> {
                     if (mValue != 1f && mValue != -1f) {
                         multipleVectorByValue(i, mValue);
                     }
-                    addOrSubtractVectorss(i, j);
+                    addOrSubtractVectors(i, j);
                     m[i] = r;
                     result.put(String.format(Locale.US, RESTORE_VECTOR, i + 1), m);
                 }
@@ -171,7 +171,7 @@ public class CalculateDeterminant implements Callable<CalculationResult> {
         result.put(String.format(Locale.US, MULTIPLE_VECTOR, index + 1, CalculationResult.doubleToString(value)), m);
     }
 
-    private void addOrSubtractVectorss(int rIndex, int nIndex) {
+    private void addOrSubtractVectors(int rIndex, int nIndex) {
         double[] r = m[rIndex];
         double[] n = m[nIndex];
         if (r[rIndex] + n[rIndex] == 0) {

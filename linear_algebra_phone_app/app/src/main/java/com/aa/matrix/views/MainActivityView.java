@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,13 +22,12 @@ public class MainActivityView extends BaseActivity {
     private RelativeLayout rlMainActivity;
 
     private LinearLayout llMatrixLayout;
-    private LinearLayout llFillZeroes;
 
-    private EditText etMatrixColumns;
-    private EditText etMatrixRows;
+    private LinearLayout llFillZeroes;
 
     private RecyclerView rvMatrix;
 
+    private Button btnSubmitMatrixSize;
     private Button btnDeterminant;
     private Button btnGauss;
     private Button btnReverses;
@@ -44,8 +42,7 @@ public class MainActivityView extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         rlMainActivity = (RelativeLayout) findViewById(R.id.rlMainActivity);
-        etMatrixColumns = (EditText) findViewById(R.id.etMatrixColumns);
-        etMatrixRows = (EditText) findViewById(R.id.etMatrixRows);
+        btnSubmitMatrixSize = (Button) findViewById(R.id.btnSubmitMatrixSize);
         llMatrixLayout = (LinearLayout) findViewById(R.id.llMatrixLayout);
         llFillZeroes = (LinearLayout) findViewById(R.id.llFillZeroes);
         rvMatrix = (RecyclerView) findViewById(R.id.rvInputMatrix);
@@ -60,9 +57,7 @@ public class MainActivityView extends BaseActivity {
     public void attachEvents() {
         MainActivityController controller = new MainActivityController(this);
         rlMainActivity.setOnFocusChangeListener(controller.buildHideKeyboardListener());
-        etMatrixColumns.setOnEditorActionListener(controller.buildMatrixActionOnDonePress());
-        etMatrixRows.setOnFocusChangeListener(controller.buildMatrixActionOnFocusChange());
-        etMatrixColumns.setOnFocusChangeListener(controller.buildMatrixActionOnFocusChange());
+        btnSubmitMatrixSize.setOnClickListener(controller.buildOnSubmitMatrixSizeListener());
         cbFillZeroes.setOnCheckedChangeListener(controller.buildOnCheckedChangeListener());
         btnDeterminant.setOnClickListener(controller.buildOnChosenMatrixOperationAction());
         btnGauss.setOnClickListener(controller.buildOnChosenMatrixOperationAction());
@@ -92,7 +87,11 @@ public class MainActivityView extends BaseActivity {
             llMatrixLayout.setVisibility(View.VISIBLE);
         }
         rvMatrix.setLayoutManager(layoutManager);
-        rvMatrix.setAdapter(adapter);
+        if (rvMatrix.getAdapter() != null) {
+            rvMatrix.swapAdapter(adapter, true);
+        } else {
+            rvMatrix.setAdapter(adapter);
+        }
     }
 
     public void hideError(TextView errorField) {

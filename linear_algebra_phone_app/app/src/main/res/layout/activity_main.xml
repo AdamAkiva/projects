@@ -46,11 +46,11 @@
             android:layout_marginStart="30dp"
             android:hint="@string/row"
             android:autofillHints="@string/number"
-            android:inputType="numberDecimal"
+            android:inputType="number"
             android:textAlignment="center"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:maxLength="2"
+            android:maxLength="1"
             android:imeOptions="actionNext"/>
 
         <EditText
@@ -61,11 +61,21 @@
             android:hint="@string/column"
             android:autofillHints="@string/number"
             android:textAlignment="center"
-            android:inputType="numberDecimal"
+            android:inputType="number"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:maxLength="2"
+            android:maxLength="1"
             android:imeOptions="actionDone"/>
+
+        <Button style="@android:style/Widget.DeviceDefault.Button.Borderless"
+            android:id="@+id/btnSubmitMatrixSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:text="@android:string/ok"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

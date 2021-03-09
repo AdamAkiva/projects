@@ -11,7 +11,7 @@ public class CalculationResult {
     private final int rows;
     private final int cols;
     private String result;
-    private final Map<String, double[][]> snapShots;
+    private final Map<String, double[][]> steps;
 
     private static final String TEXT_VIEW_SEPARATOR = "--------------------------------------------" +
             "------------";
@@ -20,7 +20,7 @@ public class CalculationResult {
         this.rows = rows;
         this.cols = cols;
         this.result = "";
-        snapShots = new LinkedHashMap<>();
+        steps = new LinkedHashMap<>();
     }
 
     public void setResult(String result) {
@@ -34,7 +34,7 @@ public class CalculationResult {
     }
 
     public void put(String str, double[][] matrix) {
-        snapShots.put(str, deepCopyMatrix(matrix));
+        steps.put(str, deepCopyMatrix(matrix));
     }
 
     private double[][] deepCopyMatrix(double[][] matrix) {
@@ -67,7 +67,7 @@ public class CalculationResult {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, double[][]> snapShot: snapShots.entrySet()) {
+        for (Map.Entry<String, double[][]> snapShot: steps.entrySet()) {
             sb.append(snapShotToPrintableString(snapShot));
         }
         sb.append(result);
