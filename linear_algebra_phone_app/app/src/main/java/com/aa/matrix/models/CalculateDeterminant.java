@@ -1,6 +1,5 @@
 package com.aa.matrix.models;
 
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.Callable;
 
@@ -53,13 +52,13 @@ public class CalculateDeterminant implements Callable<CalculationResult> {
         } else {
             for (int i = 0; i < rows - 1; i++) {
                 for (int j = i + 1; j < rows; j++) {
-                    // Checks if all values below diagonal line are 0
-                    if (checkIfCalculationsAreDone()) {
-                        return result;
-                    }
                     // Checks if there is a zero vector (didn't bother to check for a duplicate vector,
                     // since a duplicate vector in the next iteration will be a zero vector)
                     if (checkForAZeroVector() != -1) {
+                        return result;
+                    }
+                    // Checks if all values below diagonal line are 0
+                    if (checkIfCalculationsAreDone()) {
                         return result;
                     }
                     // If the pivot is 0 find a vector to swap with
@@ -71,7 +70,7 @@ public class CalculateDeterminant implements Callable<CalculationResult> {
                         }
                     }
                     // Gets here if either the pivot is not 0 or there was a vector swap with
-                    double[] r = hardCopyVector(m[i]);
+                    double[] r = Vector.hardCopyVector(m[i]);
                     if (r[i] != 1) {
                         changeVectorPivotToOne(i);
                     }
@@ -208,9 +207,5 @@ public class CalculateDeterminant implements Callable<CalculationResult> {
         }
         result.setResult(MULTIPLE_DIAGONAL_LINE + sb.toString() +
                 CalculationResult.doubleToString(res) + System.lineSeparator());
-    }
-
-    private double[] hardCopyVector(double[] r) {
-        return Arrays.copyOf(r, r.length);
     }
 }

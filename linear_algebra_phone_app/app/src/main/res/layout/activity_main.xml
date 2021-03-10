@@ -108,13 +108,13 @@
         android:visibility="gone">
 
         <CheckBox
-            android:id="@+id/cbFillZeroes"
+            android:id="@+id/cbMainActivityFillWithZeroes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/tvFillZeroes"
+            android:id="@+id/tvMainActivityFillWithZeroes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/fillWithZeroes"
@@ -180,16 +180,5 @@
             android:visibility="invisible"/>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llFreeColumnRow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="30dp"
-        android:layout_below="@id/llCalculationOptions"
-        android:visibility="gone"/>
 
 </RelativeLayout>

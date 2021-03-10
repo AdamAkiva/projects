@@ -28,8 +28,8 @@ public class DisplayResultActivityView extends BaseActivity {
             opn = getIntent().getExtras().getInt(OPERATION);
         }
 
-        pbLoadingResult = (ProgressBar) findViewById(R.id.pbLoadingResult);
-        tvDisplayResult = (TextView) findViewById(R.id.tvResult);
+        pbLoadingResult = findViewById(R.id.pbLoadingResult);
+        tvDisplayResult = findViewById(R.id.tvResult);
 
         new DisplayResultActivityController(this, opn);
     }
@@ -46,12 +46,12 @@ public class DisplayResultActivityView extends BaseActivity {
     }
 
     public void displayGaussJordanResult(CalculationResult result) {
-        String textToDisplay = result.toString();
-        tvDisplayResult.setText(textToDisplay);
+//        String textToDisplay = result.toString();
+//        tvDisplayResult.setText(textToDisplay);
     }
 
     public void displayInverseMatrixResult(CalculationResult result) {
-        String textToDisplay = result.toString();
-        tvDisplayResult.setText(textToDisplay);
+//        String textToDisplay = result.toString();
+//        tvDisplayResult.setText(textToDisplay);
     }
 }

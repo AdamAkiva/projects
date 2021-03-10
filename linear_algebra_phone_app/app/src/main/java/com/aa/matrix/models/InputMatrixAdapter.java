@@ -1,4 +1,4 @@
-package com.aa.matrix.etc;
+package com.aa.matrix.models;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,7 +33,7 @@ public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.
 
         private ViewHolder(View v) {
             super(v);
-            editText = (EditText) v.findViewById(R.id.etInputMatrixCell);
+            editText = v.findViewById(R.id.etInputMatrixCell);
         }
     }
 
@@ -74,6 +74,15 @@ public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.
         for (int i = 0; i < getItemCount(); i++) {
             if (matrixValues[i].equals(EMPTY_STRING)) {
                 matrixValues[i] = String.valueOf(ZERO);
+                notifyItemChanged(i);
+            }
+        }
+    }
+
+    public void emptyCellsWithZeroes() {
+        for (int i = 0; i < getItemCount(); i++) {
+            if (matrixValues[i].equals(String.valueOf(ZERO))) {
+                matrixValues[i] = "";
                 notifyItemChanged(i);
             }
         }

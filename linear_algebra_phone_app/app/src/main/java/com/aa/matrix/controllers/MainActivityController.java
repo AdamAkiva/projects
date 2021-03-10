@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.aa.matrix.R;
-import com.aa.matrix.etc.InputMatrixAdapter;
+import com.aa.matrix.models.InputMatrixAdapter;
 import com.aa.matrix.etc.InvalidParameterException;
-import com.aa.matrix.models.MainModel;
+import com.aa.matrix.models.BaseModel;
 import com.aa.matrix.models.Matrix;
-import com.aa.matrix.views.BaseActivity;
+import com.aa.matrix.views.DisplayResultActivityView;
 import com.aa.matrix.views.ErrorTextView;
 import com.aa.matrix.views.MainActivityView;
 
@@ -31,15 +31,13 @@ import static com.aa.matrix.views.BaseActivity.MATRIX_MUST_BE_FULL;
 import static com.aa.matrix.views.BaseActivity.SMART_ASS;
 import static com.aa.matrix.views.BaseActivity.SOMETHING_WENT_WRONG;
 
-public class MainActivityController {
+public class MainActivityController extends BaseController {
 
-    private final MainModel model = MainModel.getInstance();
+    private final BaseModel model = BaseModel.getInstance();
 
     private final MainActivityView view;
 
     private final Context context;
-
-    private FreeColumnRowController freeColumnController;
 
     private final RelativeLayout rlMainActivity;
     private final EditText etMatrixRows;
@@ -73,20 +71,9 @@ public class MainActivityController {
                     if (checkIfMatrixCanBeBuilt()) {
                         hideError(errorField);
                         buildMatrixView();
-                        showButtons();
+                        displayButtons();
                     }
                 } catch (InvalidParameterException ignored) {}
-            }
-        };
-    }
-
-    public View.OnFocusChangeListener buildHideKeyboardListener() {
-        return new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    BaseActivity.hideKeyboard(rlMainActivity, view);
-                }
             }
         };
     }
@@ -100,6 +87,8 @@ public class MainActivityController {
                         createCustomAdapter();
                     }
                     adapter.fillEmptyCellsWithZeroes();
+                } else {
+                    adapter.emptyCellsWithZeroes();
                 }
             }
         };
@@ -109,7 +98,7 @@ public class MainActivityController {
         return new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                BaseActivity.getService().execute(new Runnable() {
+                getService().execute(new Runnable() {
                     @Override
                     public void run() {
                         hideError(errorField);
@@ -118,11 +107,11 @@ public class MainActivityController {
                                 model.setMatrix(Matrix.convertStringArrayToMatrix(matrixValues, rows, columns));
                                 int btnId = v.getId();
                                 if (btnId == R.id.btnDeterminant) {
-                                    view.goToResultActivity(DETERMINANT);
+                                    goToResultActivity(view, DisplayResultActivityView.class, DETERMINANT);
                                 } else if (btnId == R.id.btnGauss) {
-                                    buildGaussJordenFreeColumnView(columns);
+                                    buildGaussJordenFreeColumnView();
                                 } else if (btnId == R.id.btnInverse) {
-                                    view.goToResultActivity(INVERSE_MATRIX);
+                                    goToResultActivity(view, DisplayResultActivityView.class, INVERSE_MATRIX);
                                 }
                             } else {
                                 errorField = ErrorTextView.displayErrorTextView(view, MATRIX_MUST_BE_FULL,
@@ -192,8 +181,8 @@ public class MainActivityController {
         view.buildMatrixView(createCustomAdapter(), createCustomAdapterLayoutManager());
     }
 
-    private void showButtons() {
-        view.showButtons();
+    private void displayButtons() {
+        view.displayButtons();
     }
 
     private void hideError(TextView errorField) {
@@ -219,14 +208,13 @@ public class MainActivityController {
         }
     }
 
-    private void buildGaussJordenFreeColumnView(int columns) {
-        freeColumnController = new FreeColumnRowController(view, columns);
-        view.runOnUiThread(new Runnable() {
+    private void buildGaussJordenFreeColumnView() {
+        this.view.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                freeColumnController.build();
+                final FreeColumnDialogController controller = new FreeColumnDialogController(view, rows);
+                controller.build();
             }
         });
     }
-
 }
