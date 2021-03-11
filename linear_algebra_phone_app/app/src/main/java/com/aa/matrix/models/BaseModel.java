@@ -3,7 +3,7 @@ package com.aa.matrix.models;
 public class BaseModel {
 
     private Matrix matrix;
-     private Vector freeColumn;
+    private Vector freeColumn;
 
     private static BaseModel instance;
 

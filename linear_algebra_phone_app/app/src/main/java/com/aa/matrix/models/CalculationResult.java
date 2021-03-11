@@ -67,7 +67,7 @@ public class CalculationResult {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, double[][]> snapShot: steps.entrySet()) {
+        for (Map.Entry<String, double[][]> snapShot : steps.entrySet()) {
             sb.append(snapShotToPrintableString(snapShot));
         }
         sb.append(result);

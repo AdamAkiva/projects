@@ -3,10 +3,7 @@ package com.aa.matrix.controllers;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.aa.matrix.R;
@@ -14,6 +11,12 @@ import com.aa.matrix.models.BaseModel;
 import com.aa.matrix.models.Vector;
 import com.aa.matrix.views.DisplayResultActivityView;
 import com.aa.matrix.views.FreeColumnDialogView;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Locale;
 
 import static com.aa.matrix.views.BaseActivity.EMPTY_STRING;
 import static com.aa.matrix.views.BaseActivity.GAUSS_JORDAN;
@@ -29,7 +32,10 @@ public class FreeColumnDialogController extends BaseController {
 
     private final int rows;
 
-    private final EditText[] editTexts;
+    private final TextInputLayout[] textInputLayouts;
+    private final TextInputEditText[] textInputEditTexts;
+
+    private static final String TEXT_INPUT_EDIT_TEXT_HINT = "X";
 
     public FreeColumnDialogController(final Activity callerActivity, final int rows) {
         this.callerActivity = callerActivity;
@@ -38,7 +44,8 @@ public class FreeColumnDialogController extends BaseController {
         // only after the show() (for dialogs, for other view other methods)
         this.view = new FreeColumnDialogView(callerActivity);
         this.rows = rows;
-        editTexts = new EditText[rows];
+        textInputLayouts = new TextInputLayout[rows];
+        textInputEditTexts = new TextInputEditText[rows];
     }
 
     private CompoundButton.OnCheckedChangeListener fillEmptyInputsWithZeroesEvent() {
@@ -58,9 +65,9 @@ public class FreeColumnDialogController extends BaseController {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String[] freeColumnValues = new String[editTexts.length];
-                for (int i = 0; i < editTexts.length; i++) {
-                    freeColumnValues[i] = editTexts[i].getText().toString();
+                String[] freeColumnValues = new String[textInputEditTexts.length];
+                for (int i = 0; i < textInputEditTexts.length; i++) {
+                    freeColumnValues[i] = textInputEditTexts[i].getText().toString();
                 }
                 model.setFreeColumn(Vector.convertStringArrayToVector(freeColumnValues));
                 goToResultActivity(callerActivity, DisplayResultActivityView.class, GAUSS_JORDAN);
@@ -83,73 +90,89 @@ public class FreeColumnDialogController extends BaseController {
 
     private void addCheckBox() {
         ViewGroup vg = view.addFillEmptyInputsWithZeroesCheckBox();
-        attachCheckBoxEvent((CheckBox) vg.findViewById(R.id.cbFreeColumnFillWithZeroes));
+        attachCheckBoxEvent((MaterialCheckBox) vg.findViewById(R.id.cbFreeColumnFillWithZeroes));
     }
 
-    private void attachCheckBoxEvent(CheckBox cbFillWithZeroes) {
+    private void attachCheckBoxEvent(MaterialCheckBox cbFillWithZeroes) {
         cbFillWithZeroes.setOnCheckedChangeListener(fillEmptyInputsWithZeroesEvent());
     }
 
     private void addButtons() {
         ViewGroup vg = view.addButtonsLayout();
-        Button btnSubmit = vg.findViewById(R.id.btnSubmit);
-        Button btnCancel = vg.findViewById(R.id.btnCancel);
+        MaterialButton btnSubmit = vg.findViewById(R.id.btnSubmit);
+        MaterialButton btnCancel = vg.findViewById(R.id.btnCancel);
         attachButtonEvents(btnSubmit, btnCancel);
         attachHideKeyboardFocusChangeEvents(btnSubmit, btnCancel);
     }
 
-    public void attachButtonEvents(Button btnSubmit, Button btnCancel) {
+    public void attachButtonEvents(MaterialButton btnSubmit, MaterialButton btnCancel) {
         btnSubmit.setOnClickListener(submitFreeColumnValuesEvent());
         btnCancel.setOnClickListener(closeDialogViewEvent());
     }
 
-    public void attachHideKeyboardFocusChangeEvents(Button btnSubmit, Button btnCancel) {
+    public void attachHideKeyboardFocusChangeEvents(MaterialButton btnSubmit, MaterialButton btnCancel) {
         LinearLayout root = view.findViewById(R.id.llDialogView);
         btnSubmit.setOnFocusChangeListener(buildHideKeyboardListener(root, callerActivity));
         btnCancel.setOnFocusChangeListener(buildHideKeyboardListener(root, callerActivity));
     }
 
-    private void populateEditTextArray() {
+    private void populateEditTextArrays() {
         ViewGroup vg = view.findViewById(R.id.llDialogView);
         // Hint: currently xml structure looks like this:
         // <LinearLayout>
         //    <LinearLayout>
-        //       <EditText>
+        //       <TextInputLayout>
+        //          <FrameLayout> (Not written by me, however it's implements by TextInputLayout)
+        //             <TextView />
+        //             <TextInputEditText />  (What we need)
+        //          </FrameLayout>
+        //       </TextInputLayout>
         //    </LinearLayout>
         // </LinearLayout>
-        // and we are looking for the EditText, so that's what the loop is for.
+        // and we are looking for the TextInputEditText, so that's what the loop is for.
+        // vg holds the first LinearLayout so we need to get vg.childAt(0).childAt(0).childAt(0),
+        // which will give us the TextInputLayout to iterate upon.
         // if the structure changes this will longer be valid.
-        for (int i = 0, counter = 0; i < vg.getChildCount(); i++) {
-            ViewGroup parent = (ViewGroup) vg.getChildAt(i);
-            for (int j = 0; j < parent.getChildCount(); j++) {
-                if (parent.getChildAt(j) instanceof EditText) {
-                    editTexts[counter++] = (EditText) parent.getChildAt(j);
-                }
+        for (int i = 0; i < vg.getChildCount(); i++) {
+            ViewGroup parent = (ViewGroup) ((ViewGroup) vg.getChildAt(i)).getChildAt(0);
+            if (parent instanceof TextInputLayout) {
+                textInputLayouts[i] = (TextInputLayout) parent;
+            }
+            View view = ((ViewGroup) parent.getChildAt(0)).getChildAt(1);
+            if (view instanceof TextInputEditText) {
+                textInputEditTexts[i] = (TextInputEditText) view;
             }
         }
     }
 
+    private void setHintsForTextInputEditTextFields() {
+        for (int i = 0; i < textInputLayouts.length; i++) {
+            textInputLayouts[i].setHint(String.format(Locale.US, "%s%d:", TEXT_INPUT_EDIT_TEXT_HINT, i));
+        }
+    }
+
     private void fillEmptyInputsWithZeroes() {
-        for (EditText editText : editTexts) {
-            if (editText.getText().toString().equals(EMPTY_STRING)) {
-                editText.setText(String.valueOf(ZERO));
+        for (TextInputEditText textInputEditText : textInputEditTexts) {
+            if (textInputEditText.getText().toString().equals(EMPTY_STRING)) {
+                textInputEditText.setText(String.valueOf(ZERO));
             }
         }
     }
 
     private void emptyInputsWithZeroes() {
-        for (EditText editText : editTexts) {
-            if (editText.getText().toString().equals(String.valueOf(ZERO))) {
-                editText.setText(EMPTY_STRING);
+        for (TextInputEditText textInputEditText : textInputEditTexts) {
+            if (textInputEditText.getText().toString().equals(String.valueOf(ZERO))) {
+                textInputEditText.setText(EMPTY_STRING);
             }
         }
     }
 
     public void build() {
         view.show();
-        // Must be called here not beforehand look at the explanation above.
+        // Must be called here and in this order not beforehand look at the explanation above.
         addRows();
-        populateEditTextArray();
+        populateEditTextArrays();
+        setHintsForTextInputEditTextFields();
         addCheckBox();
         addButtons();
     }

@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">Linear Algebra</string>
     <string name="mainActivityTitle">Enter a matrix</string>
-    <string name="matrix">Matrix:</string>
-    <string name="row">Row</string>
-    <string name="column">Column</string>
+    <string name="rows">Rows</string>
+    <string name="columns">Columns</string>
     <string name="number">Number</string>
     <string name="determinant">Determinant</string>
     <string name="gauss">Gauss</string>

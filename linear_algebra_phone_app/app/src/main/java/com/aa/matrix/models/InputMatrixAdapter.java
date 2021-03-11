@@ -6,13 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aa.matrix.R;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Locale;
 
 import static com.aa.matrix.views.BaseActivity.EMPTY_STRING;
 import static com.aa.matrix.views.BaseActivity.ZERO;
@@ -20,7 +23,14 @@ import static com.aa.matrix.views.BaseActivity.ZERO;
 public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.ViewHolder> {
 
     private final String[] matrixValues;
+    private final int cols;
+
+    private int rowIndex;
+    private int colIndex;
+
     private boolean giveFocusToFirstElementOnViewCreation;
+
+    private static final String INPUT_TEXT_EDIT_TEXT_HINT = "a";
 
     /**
      * Static inner class used to save data in order to
@@ -29,17 +39,22 @@ public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.
      * .ViewHolder for details
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final EditText editText;
+        private final TextInputLayout layout;
+        private final TextInputEditText editText;
 
         private ViewHolder(View v) {
             super(v);
-            editText = v.findViewById(R.id.etInputMatrixCell);
+            layout = v.findViewById(R.id.tilMatrixCell);
+            editText = v.findViewById(R.id.etMatrixCell);
         }
     }
 
-    public InputMatrixAdapter(final String[] matrixValues) {
+    public InputMatrixAdapter(final String[] matrixValues, int cols) {
         this.matrixValues = matrixValues;
-        this.giveFocusToFirstElementOnViewCreation = true;
+        this.cols = cols;
+        this.rowIndex = 0;
+        this.colIndex = 0;
+        giveFocusToFirstElementOnViewCreation = false;
     }
 
     @NonNull
@@ -51,23 +66,36 @@ public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.
     }
 
     @Override
-    public void onBindViewHolder(final @NonNull ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final @NonNull ViewHolder vh, final int position) {
         if (giveFocusToFirstElementOnViewCreation && position == 0) {
-            viewHolder.editText.requestFocus();
+            vh.editText.requestFocus();
             giveFocusToFirstElementOnViewCreation = false;
         }
-        viewHolder.editText.setText(matrixValues[position]);
-        viewHolder.editText.addTextChangedListener(updateMatrixValuesListener(viewHolder, position));
-        if (viewHolder.getAdapterPosition() != getItemCount() - 1) {
-            viewHolder.editText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        setHint(vh);
+        vh.editText.setText(matrixValues[position]);
+        vh.editText.addTextChangedListener(updateMatrixValuesListener(vh, position));
+        if (vh.getAdapterPosition() != getItemCount() - 1) {
+            vh.editText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         } else {
-            viewHolder.editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            vh.editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         }
     }
 
     @Override
     public int getItemCount() {
         return matrixValues.length;
+    }
+
+    private void setHint(ViewHolder vh) {
+        if (colIndex == cols) {
+            colIndex = 0;
+            rowIndex++;
+        }
+        String hint = String.format(Locale.US, "%s[%d][%d]:", INPUT_TEXT_EDIT_TEXT_HINT,
+                rowIndex, colIndex++);
+        if (vh.layout.getHint() == null || vh.layout.getHint() != hint) {
+            vh.layout.setHint(hint);
+        }
     }
 
     public void fillEmptyCellsWithZeroes() {
@@ -91,10 +119,12 @@ public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.
     private TextWatcher updateMatrixValuesListener(final ViewHolder vh, final int position) {
         return new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {

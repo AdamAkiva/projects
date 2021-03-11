@@ -30,7 +30,8 @@ public class DisplayResultActivityController extends BaseController {
     private final ProgressBar pbLoadingResult;
 
     private final Matrix matrix;
-    @Nullable private final Vector freeColumn;
+    @Nullable
+    private final Vector freeColumn;
     private final int matrixOperation;
 
     private static final String TAG = DisplayResultActivityController.class.getName();

@@ -5,15 +5,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.aa.matrix.R;
 import com.aa.matrix.controllers.MainActivityController;
 import com.aa.matrix.models.InputMatrixAdapter;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.checkbox.MaterialCheckBox;
 
 
 public class MainActivityView extends BaseActivity {
@@ -26,12 +25,12 @@ public class MainActivityView extends BaseActivity {
 
     private RecyclerView rvMatrix;
 
-    private Button btnSubmitMatrixSize;
-    private Button btnDeterminant;
-    private Button btnGauss;
-    private Button btnReverses;
+    private MaterialButton btnSubmitMatrixSize;
+    private MaterialButton btnDeterminant;
+    private MaterialButton btnGauss;
+    private MaterialButton btnReverses;
 
-    private CheckBox cbFillZeroes;
+    private MaterialCheckBox cbFillZeroes;
 
     private MainActivityController controller;
 
@@ -103,14 +102,6 @@ public class MainActivityView extends BaseActivity {
             rvMatrix.swapAdapter(adapter, true);
         } else {
             rvMatrix.setAdapter(adapter);
-        }
-    }
-
-    public void hideError(TextView errorField) {
-        if (errorField != null) {
-            if (errorField.getId() != View.NO_ID) {
-                ErrorTextView.removeErrorTextView(MainActivityView.this, rlMainActivity, errorField);
-            }
         }
     }
 }
