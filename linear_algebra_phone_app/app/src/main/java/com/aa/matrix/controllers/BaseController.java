@@ -9,10 +9,21 @@ import android.view.inputmethod.InputMethodManager;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.aa.matrix.views.BaseActivity.OPERATION;
-import static com.aa.matrix.views.BaseActivity.ZERO;
-
 public abstract class BaseController {
+
+    public static final String OPERATION = "Operation: ";
+
+    public static final CharSequence INPUT_VALUES = "Please input rows and cols values";
+    public static final String ROWS_INVALID = "Between 1 to 5";
+    public static final String COLS_INVALID = "Between 1 to 5";
+    public static final String EMPTY_STRING = "";
+    public static final CharSequence SMART_ASS = "Why are you a smartass?";
+    public static final CharSequence MATRIX_MUST_BE_FULL = "Matrix must be full";
+    public static final CharSequence VECTOR_MUST_BE_FULL = "Vector must be full";
+
+    public static final int DETERMINANT = 1;
+    public static final int GAUSS_JORDAN = 2;
+    public static final int INVERSE_MATRIX = 3;
 
     private static final int MAXIMUM_THREAD_NUMBER = 5;
     private static final ExecutorService service = Executors.newFixedThreadPool(MAXIMUM_THREAD_NUMBER);
@@ -36,13 +47,13 @@ public abstract class BaseController {
         final InputMethodManager inputMethodManager = (InputMethodManager) activityContext.getSystemService(Activity
                 .INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
-            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), ZERO);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
-    protected void goToResultActivity(Context context, Class<?> activityToStart, int opn) {
+    protected void goToResultActivity(Context context, Class<?> activityToStart, String key, int value) {
         Intent intent = new Intent(context, activityToStart);
-        intent.putExtra(OPERATION, opn);
+        intent.putExtra(key, value);
         context.startActivity(intent);
     }
 }

@@ -1,12 +1,13 @@
 package com.aa.matrix.views;
 
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.aa.matrix.R;
 import com.aa.matrix.controllers.MainActivityController;
@@ -28,7 +29,7 @@ public class MainActivityView extends BaseActivity {
     private MaterialButton btnSubmitMatrixSize;
     private MaterialButton btnDeterminant;
     private MaterialButton btnGauss;
-    private MaterialButton btnReverses;
+    private MaterialButton btnInverse;
 
     private MaterialCheckBox cbFillZeroes;
 
@@ -46,51 +47,13 @@ public class MainActivityView extends BaseActivity {
         rvMatrix = findViewById(R.id.rvInputMatrix);
         btnDeterminant = findViewById(R.id.btnDeterminant);
         btnGauss = findViewById(R.id.btnGauss);
-        btnReverses = findViewById(R.id.btnInverse);
+        btnInverse = findViewById(R.id.btnInverse);
         cbFillZeroes = findViewById(R.id.cbMainActivityFillWithZeroes);
 
         controller = new MainActivityController(this);
 
-        attachButtonEvents();
-        attachHideKeyboardFocusChangeEvents();
-        attachCheckBoxEvent();
-    }
-
-    private void attachButtonEvents() {
         btnSubmitMatrixSize.setOnClickListener(controller.buildOnSubmitMatrixSizeListener());
-        btnDeterminant.setOnClickListener(controller.buildOnChosenMatrixOperationAction());
-        btnGauss.setOnClickListener(controller.buildOnChosenMatrixOperationAction());
-        btnReverses.setOnClickListener(controller.buildOnChosenMatrixOperationAction());
-    }
-
-    private void attachHideKeyboardFocusChangeEvents() {
         btnSubmitMatrixSize.setOnFocusChangeListener(controller.buildHideKeyboardListener(rlMainActivity, this));
-        cbFillZeroes.setOnFocusChangeListener(controller.buildHideKeyboardListener(rlMainActivity, this));
-        btnDeterminant.setOnFocusChangeListener(controller.buildHideKeyboardListener(rlMainActivity, this));
-        btnGauss.setOnFocusChangeListener(controller.buildHideKeyboardListener(rlMainActivity, this));
-        btnReverses.setOnFocusChangeListener(controller.buildHideKeyboardListener(rlMainActivity, this));
-    }
-
-    private void attachCheckBoxEvent() {
-        cbFillZeroes.setOnCheckedChangeListener(controller.buildOnCheckedChangeListener());
-    }
-
-    public void displayButtons() {
-        if (llFillZeroes.getVisibility() == View.INVISIBLE || llFillZeroes.getVisibility() == View.GONE) {
-            llFillZeroes.setVisibility(View.VISIBLE);
-        }
-        if (btnDeterminant.getVisibility() == View.INVISIBLE || btnDeterminant.getVisibility() == View.GONE) {
-            btnDeterminant.setVisibility(View.VISIBLE);
-            btnDeterminant.setClickable(true);
-        }
-        if (btnGauss.getVisibility() == View.INVISIBLE || btnGauss.getVisibility() == View.GONE) {
-            btnGauss.setVisibility(View.VISIBLE);
-            btnGauss.setClickable(true);
-        }
-        if (btnReverses.getVisibility() == View.INVISIBLE || btnReverses.getVisibility() == View.GONE) {
-            btnReverses.setVisibility(View.VISIBLE);
-            btnReverses.setClickable(true);
-        }
     }
 
     public void buildMatrixView(InputMatrixAdapter adapter, GridLayoutManager layoutManager) {
@@ -103,5 +66,72 @@ public class MainActivityView extends BaseActivity {
         } else {
             rvMatrix.setAdapter(adapter);
         }
+    }
+
+    public void displayCheckBoxRow() {
+        if (llFillZeroes.getVisibility() == View.INVISIBLE || llFillZeroes.getVisibility() == View.GONE) {
+            llFillZeroes.setVisibility(View.VISIBLE);
+            cbFillZeroes.setOnFocusChangeListener(controller.buildHideKeyboardListener(rlMainActivity, this));
+            cbFillZeroes.setOnCheckedChangeListener(controller.buildOnCheckedChangeListener());
+        }
+    }
+
+    public void displayDeterminantButton() {
+        if (btnDeterminant.getVisibility() == View.INVISIBLE || btnDeterminant.getVisibility() == View.GONE) {
+            btnDeterminant.setVisibility(View.VISIBLE);
+            btnDeterminant.setClickable(true);
+            btnDeterminant.setOnClickListener(controller.buildOnChosenMatrixOperationAction());
+            btnDeterminant.setOnFocusChangeListener(controller.buildHideKeyboardListener(rlMainActivity, this));
+        }
+    }
+
+    public void displayGaussJordanButton() {
+        if (btnGauss.getVisibility() == View.INVISIBLE || btnGauss.getVisibility() == View.GONE) {
+            btnGauss.setVisibility(View.VISIBLE);
+            btnGauss.setClickable(true);
+            btnGauss.setOnClickListener(controller.buildOnChosenMatrixOperationAction());
+            btnGauss.setOnFocusChangeListener(controller.buildHideKeyboardListener(rlMainActivity, this));
+        }
+    }
+
+    public void displayInverseMatrixButton() {
+        if (btnInverse.getVisibility() == View.INVISIBLE || btnInverse.getVisibility() == View.GONE) {
+            btnInverse.setVisibility(View.VISIBLE);
+            btnInverse.setClickable(true);
+            btnInverse.setOnClickListener(controller.buildOnChosenMatrixOperationAction());
+            btnInverse.setOnFocusChangeListener(controller.buildHideKeyboardListener(rlMainActivity, this));
+        }
+    }
+
+    public void hideDeterminantButton() {
+        if (btnDeterminant.getVisibility() == View.VISIBLE) {
+            btnDeterminant.setVisibility(View.INVISIBLE);
+            btnDeterminant.setClickable(false);
+            btnDeterminant.setOnClickListener(null);
+            btnDeterminant.setOnFocusChangeListener(null);
+        }
+    }
+
+    public void hideGaussJordanButton() {
+        if (btnGauss.getVisibility() == View.VISIBLE) {
+            btnGauss.setVisibility(View.INVISIBLE);
+            btnGauss.setClickable(false);
+            btnGauss.setOnClickListener(null);
+            btnGauss.setOnFocusChangeListener(null);
+        }
+    }
+
+    public void hideInverseMatrixButton() {
+        if (btnInverse.getVisibility() == View.VISIBLE) {
+            btnInverse.setVisibility(View.INVISIBLE);
+            btnInverse.setClickable(false);
+            btnInverse.setOnClickListener(null);
+            btnInverse.setOnFocusChangeListener(null);
+        }
+    }
+
+    @Override
+    public ViewGroup getRootView() {
+        return (ViewGroup) findViewById(R.id.llDisplayResults);
     }
 }

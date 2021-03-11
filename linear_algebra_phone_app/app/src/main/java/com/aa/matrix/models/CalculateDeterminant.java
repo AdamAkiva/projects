@@ -5,20 +5,11 @@ import java.util.concurrent.Callable;
 
 public class CalculateDeterminant implements Callable<CalculationResult> {
 
-    private final double[][] m;
-    private final int rows;
-    private final int cols;
-    private int swapCount;
-
-    private final CalculationResult result;
-
     private static final String ONE_BY_ONE_MATRIX = "Nothing to calculate." + System.lineSeparator() +
             "Determinant = %s" + System.lineSeparator();
-
     private static final String TWO_BY_TWO_MATRIX = "Used the shortcut way" + System.lineSeparator()
             + "To calculate 2x2 determinant:" + System.lineSeparator() + "(%s * %s) - (%s * %s) = %s"
             + System.lineSeparator();
-
     private static final String DETERMINANT = "Determinant =";
     private static final String BASE_MATRIX = "Inputted matrix:" + System.lineSeparator();
     private static final String SWAPPED_VECTORS = "Swapped row %d with row %d" + System.lineSeparator();
@@ -30,6 +21,11 @@ public class CalculateDeterminant implements Callable<CalculationResult> {
             System.lineSeparator();
     private static final String ZERO_VECTOR = "Row %d is a zero row" + System.lineSeparator() +
             "Therefore " + DETERMINANT + "0";
+    private final double[][] m;
+    private final int rows;
+    private final int cols;
+    private final CalculationResult result;
+    private int swapCount;
 
     public CalculateDeterminant(double[][] m, int rows, int cols) {
         this.m = m;

@@ -13,9 +13,8 @@ import com.aa.matrix.R;
 
 public class FreeColumnDialogView extends Dialog {
 
-    private LinearLayout llDialogView;
-
     private final LayoutInflater inflater;
+    private LinearLayout llDialogView;
 
     public FreeColumnDialogView(Activity parent) {
         super(parent);
@@ -57,5 +56,9 @@ public class FreeColumnDialogView extends Dialog {
             inflater.inflate(R.layout.free_column_input_row,
                     (ViewGroup) findViewById(R.id.llDialogView));
         }
+    }
+
+    public ViewGroup getRootView() {
+        return (ViewGroup) findViewById(R.id.rlMainActivity);
     }
 }

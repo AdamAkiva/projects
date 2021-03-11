@@ -13,14 +13,9 @@ import com.aa.matrix.views.DisplayResultActivityView;
 import com.aa.matrix.views.FreeColumnDialogView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.util.Locale;
-
-import static com.aa.matrix.views.BaseActivity.EMPTY_STRING;
-import static com.aa.matrix.views.BaseActivity.GAUSS_JORDAN;
-import static com.aa.matrix.views.BaseActivity.ZERO;
 
 public class FreeColumnDialogController extends BaseController {
 
@@ -34,8 +29,6 @@ public class FreeColumnDialogController extends BaseController {
 
     private final TextInputLayout[] textInputLayouts;
     private final TextInputEditText[] textInputEditTexts;
-
-    private static final String TEXT_INPUT_EDIT_TEXT_HINT = "X";
 
     public FreeColumnDialogController(final Activity callerActivity, final int rows) {
         this.callerActivity = callerActivity;
@@ -67,10 +60,19 @@ public class FreeColumnDialogController extends BaseController {
             public void onClick(View v) {
                 String[] freeColumnValues = new String[textInputEditTexts.length];
                 for (int i = 0; i < textInputEditTexts.length; i++) {
-                    freeColumnValues[i] = textInputEditTexts[i].getText().toString();
+                    String value = freeColumnValues[i];
+                    if (value != null && !value.isEmpty()) {
+                        freeColumnValues[i] = textInputEditTexts[i].getText().toString();
+                    } else {
+                        Snackbar.make(view.getRootView(), VECTOR_MUST_BE_FULL, Snackbar.LENGTH_LONG).show();
+                    }
                 }
-                model.setFreeColumn(Vector.convertStringArrayToVector(freeColumnValues));
-                goToResultActivity(callerActivity, DisplayResultActivityView.class, GAUSS_JORDAN);
+                try {
+                    model.setFreeColumn(Vector.convertStringArrayToVector(freeColumnValues));
+                } catch (NumberFormatException e) {
+                    Snackbar.make(view.getRootView(), SMART_ASS, Snackbar.LENGTH_LONG).show();
+                }
+                goToResultActivity(callerActivity, DisplayResultActivityView.class, OPERATION, GAUSS_JORDAN);
             }
         };
     }
@@ -147,21 +149,21 @@ public class FreeColumnDialogController extends BaseController {
 
     private void setHintsForTextInputEditTextFields() {
         for (int i = 0; i < textInputLayouts.length; i++) {
-            textInputLayouts[i].setHint(String.format(Locale.US, "%s%d:", TEXT_INPUT_EDIT_TEXT_HINT, i));
+            textInputLayouts[i].setHint(view.getContext().getResources().getString(R.string.freeColumnCellHint, i));
         }
     }
 
     private void fillEmptyInputsWithZeroes() {
         for (TextInputEditText textInputEditText : textInputEditTexts) {
             if (textInputEditText.getText().toString().equals(EMPTY_STRING)) {
-                textInputEditText.setText(String.valueOf(ZERO));
+                textInputEditText.setText(String.valueOf(0));
             }
         }
     }
 
     private void emptyInputsWithZeroes() {
         for (TextInputEditText textInputEditText : textInputEditTexts) {
-            if (textInputEditText.getText().toString().equals(String.valueOf(ZERO))) {
+            if (textInputEditText.getText().toString().equals(String.valueOf(0))) {
                 textInputEditText.setText(EMPTY_STRING);
             }
         }

@@ -2,6 +2,7 @@ package com.aa.matrix.views;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import com.aa.matrix.R;
 import com.aa.matrix.controllers.DisplayResultActivityController;
 import com.aa.matrix.models.CalculationResult;
 
+import static com.aa.matrix.controllers.BaseController.OPERATION;
 
 public class DisplayResultActivityView extends BaseActivity {
 
@@ -53,5 +55,10 @@ public class DisplayResultActivityView extends BaseActivity {
     public void displayInverseMatrixResult(CalculationResult result) {
 //        String textToDisplay = result.toString();
 //        tvDisplayResult.setText(textToDisplay);
+    }
+
+    @Override
+    public ViewGroup getRootView() {
+        return (ViewGroup) findViewById(R.id.llDisplayResults);
     }
 }

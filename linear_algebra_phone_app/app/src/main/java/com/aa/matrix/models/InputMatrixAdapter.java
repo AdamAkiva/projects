@@ -1,5 +1,6 @@
 package com.aa.matrix.models;
 
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -15,13 +16,9 @@ import com.aa.matrix.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.Locale;
-
-import static com.aa.matrix.views.BaseActivity.EMPTY_STRING;
-import static com.aa.matrix.views.BaseActivity.ZERO;
-
 public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.ViewHolder> {
 
+    private final Context context;
     private final String[] matrixValues;
     private final int cols;
 
@@ -30,31 +27,13 @@ public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.
 
     private boolean giveFocusToFirstElementOnViewCreation;
 
-    private static final String INPUT_TEXT_EDIT_TEXT_HINT = "a";
-
-    /**
-     * Static inner class used to save data in order to
-     * save processing time,
-     * see: https://developer.android.com/reference/android/support/v7/widget/RecyclerView
-     * .ViewHolder for details
-     */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextInputLayout layout;
-        private final TextInputEditText editText;
-
-        private ViewHolder(View v) {
-            super(v);
-            layout = v.findViewById(R.id.tilMatrixCell);
-            editText = v.findViewById(R.id.etMatrixCell);
-        }
-    }
-
-    public InputMatrixAdapter(final String[] matrixValues, int cols) {
+    public InputMatrixAdapter(final Context context, final String[] matrixValues, int cols) {
+        this.context = context;
         this.matrixValues = matrixValues;
         this.cols = cols;
         this.rowIndex = 0;
         this.colIndex = 0;
-        giveFocusToFirstElementOnViewCreation = false;
+        giveFocusToFirstElementOnViewCreation = true;
     }
 
     @NonNull
@@ -91,8 +70,7 @@ public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.
             colIndex = 0;
             rowIndex++;
         }
-        String hint = String.format(Locale.US, "%s[%d][%d]:", INPUT_TEXT_EDIT_TEXT_HINT,
-                rowIndex, colIndex++);
+        String hint = context.getResources().getString(R.string.matrixInputCellHint, rowIndex, colIndex++);
         if (vh.layout.getHint() == null || vh.layout.getHint() != hint) {
             vh.layout.setHint(hint);
         }
@@ -100,8 +78,8 @@ public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.
 
     public void fillEmptyCellsWithZeroes() {
         for (int i = 0; i < getItemCount(); i++) {
-            if (matrixValues[i].equals(EMPTY_STRING)) {
-                matrixValues[i] = String.valueOf(ZERO);
+            if (matrixValues[i].isEmpty()) {
+                matrixValues[i] = String.valueOf(0);
                 notifyItemChanged(i);
             }
         }
@@ -109,7 +87,7 @@ public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.
 
     public void emptyCellsWithZeroes() {
         for (int i = 0; i < getItemCount(); i++) {
-            if (matrixValues[i].equals(String.valueOf(ZERO))) {
+            if (matrixValues[i].equals(String.valueOf(0))) {
                 matrixValues[i] = "";
                 notifyItemChanged(i);
             }
@@ -131,5 +109,22 @@ public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.
                 matrixValues[position] = vh.editText.getText().toString();
             }
         };
+    }
+
+    /**
+     * Static inner class used to save data in order to
+     * save processing time,
+     * see: https://developer.android.com/reference/android/support/v7/widget/RecyclerView
+     * .ViewHolder for details
+     */
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextInputLayout layout;
+        private final TextInputEditText editText;
+
+        private ViewHolder(View v) {
+            super(v);
+            layout = v.findViewById(R.id.tilMatrixCell);
+            editText = v.findViewById(R.id.etMatrixCell);
+        }
     }
 }

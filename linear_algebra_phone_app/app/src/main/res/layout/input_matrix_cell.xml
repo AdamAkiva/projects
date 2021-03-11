@@ -15,7 +15,8 @@
             android:layout_height="wrap_content"
             android:inputType="numberDecimal|numberSigned"
             android:maxLength="5"
-            android:textSize="13sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

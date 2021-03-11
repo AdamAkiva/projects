@@ -11,4 +11,6 @@
     <string name="fillWithZeroesTwoLines">Fill empty cells\nwith Zeroes?</string>
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
+    <string name="matrixInputCellHint"><bold>a[%1$d][%2$d]</bold></string>
+    <string name="freeColumnCellHint"><bold>x%1$d</bold></string>
 </resources>

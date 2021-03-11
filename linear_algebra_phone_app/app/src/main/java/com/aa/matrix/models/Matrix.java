@@ -12,6 +12,16 @@ public class Matrix {
         this.columnCount = columnCount;
     }
 
+    public static Matrix convertStringArrayToMatrix(String[] matrixValuesString, int rows, int cols) {
+        final double[][] matrix = new double[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                matrix[i][j] = Double.parseDouble(matrixValuesString[j + (i * rows)]);
+            }
+        }
+        return new Matrix(matrix, rows, cols);
+    }
+
     public double[][] getMatrix() {
         return matrix;
     }
@@ -22,15 +32,5 @@ public class Matrix {
 
     public int getColumnCount() {
         return columnCount;
-    }
-
-    public static Matrix convertStringArrayToMatrix(String[] matrixValuesString, int rows, int columns) {
-        final double[][] matrix = new double[rows][columns];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                matrix[i][j] = Double.parseDouble(matrixValuesString[j + (i * rows)]);
-            }
-        }
-        return new Matrix(matrix, rows, columns);
     }
 }

@@ -8,13 +8,12 @@ import java.util.Map;
 
 public class CalculationResult {
 
-    private final int rows;
-    private final int cols;
-    private String result;
-    private final Map<String, double[][]> steps;
-
     private static final String TEXT_VIEW_SEPARATOR = "--------------------------------------------" +
             "------------";
+    private final int rows;
+    private final int cols;
+    private final Map<String, double[][]> steps;
+    private String result;
 
     public CalculationResult(int rows, int cols) {
         this.rows = rows;
@@ -23,14 +22,14 @@ public class CalculationResult {
         steps = new LinkedHashMap<>();
     }
 
-    public void setResult(String result) {
-        this.result = result;
-    }
-
     public static String doubleToString(double value) {
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.UP);
         return df.format(value);
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 
     public void put(String str, double[][] matrix) {

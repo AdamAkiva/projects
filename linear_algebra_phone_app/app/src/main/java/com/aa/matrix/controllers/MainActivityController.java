@@ -5,15 +5,14 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.aa.matrix.R;
-import com.aa.matrix.models.InputMatrixAdapter;
 import com.aa.matrix.models.BaseModel;
+import com.aa.matrix.models.InputMatrixAdapter;
 import com.aa.matrix.models.Matrix;
 import com.aa.matrix.views.DisplayResultActivityView;
 import com.aa.matrix.views.MainActivityView;
@@ -23,36 +22,21 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Arrays;
 
-import static com.aa.matrix.views.BaseActivity.COLS_INVALID;
-import static com.aa.matrix.views.BaseActivity.DETERMINANT;
-import static com.aa.matrix.views.BaseActivity.INPUT_VALUES;
-import static com.aa.matrix.views.BaseActivity.INVERSE_MATRIX;
-import static com.aa.matrix.views.BaseActivity.MATRIX_MUST_BE_FULL;
-import static com.aa.matrix.views.BaseActivity.ROWS_INVALID;
-import static com.aa.matrix.views.BaseActivity.SMART_ASS;
-
 public class MainActivityController extends BaseController {
 
+    private static final String TAG = MainActivityView.class.getName();
     private final BaseModel model = BaseModel.getInstance();
-
     private final MainActivityView view;
-
     private final Context context;
-
     private final RelativeLayout rlMainActivity;
     private final TextInputEditText etMatrixRows;
-    private final TextInputEditText etMatrixColumns;
+    private final TextInputEditText etMatrixCols;
     private final TextInputLayout tilMatrixRows;
-    private final TextInputLayout tilMatrixColumns;
-    private final LinearLayout llMatrixLayout;
-
+    private final TextInputLayout tilMatrixCols;
     private InputMatrixAdapter adapter;
     private String[] matrixValues;
-
     private int rows;
-    private int columns;
-
-    private static final String TAG = MainActivityView.class.getName();
+    private int cols;
 
     public MainActivityController(MainActivityView view) {
         this.view = view;
@@ -60,9 +44,8 @@ public class MainActivityController extends BaseController {
         rlMainActivity = ((Activity) this.context).findViewById(R.id.rlMainActivity);
         tilMatrixRows = ((Activity) this.context).findViewById(R.id.tilMatrixRows);
         etMatrixRows = ((Activity) this.context).findViewById(R.id.etMatrixRows);
-        tilMatrixColumns = ((Activity) this.context).findViewById(R.id.tilMatrixColumns);
-        etMatrixColumns = ((Activity) this.context).findViewById(R.id.etMatrixColumns);
-        llMatrixLayout = ((Activity) this.context).findViewById(R.id.llMatrixLayout);
+        tilMatrixCols = ((Activity) this.context).findViewById(R.id.tilMatrixCols);
+        etMatrixCols = ((Activity) this.context).findViewById(R.id.etMatrixCols);
     }
 
     public View.OnClickListener buildOnSubmitMatrixSizeListener() {
@@ -72,7 +55,8 @@ public class MainActivityController extends BaseController {
                 try {
                     if (checkIfMatrixCanBeBuilt()) {
                         buildMatrixView();
-                        displayButtons();
+                        view.displayCheckBoxRow();
+                        displayButtons(rows == cols);
                     }
                 } catch (NumberFormatException ignored) {
                     Snackbar.make(rlMainActivity, INPUT_VALUES, Snackbar.LENGTH_LONG).show();
@@ -106,14 +90,14 @@ public class MainActivityController extends BaseController {
                     public void run() {
                         try {
                             if (checkIfMatrixIsFull()) {
-                                model.setMatrix(Matrix.convertStringArrayToMatrix(matrixValues, rows, columns));
+                                model.setMatrix(Matrix.convertStringArrayToMatrix(matrixValues, rows, cols));
                                 int btnId = v.getId();
                                 if (btnId == R.id.btnDeterminant) {
-                                    goToResultActivity(view, DisplayResultActivityView.class, DETERMINANT);
+                                    goToResultActivity(view, DisplayResultActivityView.class, OPERATION, DETERMINANT);
                                 } else if (btnId == R.id.btnGauss) {
                                     buildGaussJordenFreeColumnView();
                                 } else if (btnId == R.id.btnInverse) {
-                                    goToResultActivity(view, DisplayResultActivityView.class, INVERSE_MATRIX);
+                                    goToResultActivity(view, DisplayResultActivityView.class, OPERATION, INVERSE_MATRIX);
                                 }
                             } else {
                                 Snackbar.make(rlMainActivity, MATRIX_MUST_BE_FULL, Snackbar.LENGTH_LONG).show();
@@ -130,7 +114,7 @@ public class MainActivityController extends BaseController {
 
     private boolean checkIfMatrixCanBeBuilt() throws NumberFormatException {
         int rows = Integer.parseInt(etMatrixRows.getText().toString());
-        int cols = Integer.parseInt(etMatrixColumns.getText().toString());
+        int cols = Integer.parseInt(etMatrixCols.getText().toString());
         boolean validRows = false;
         boolean validCols = false;
         if (rows <= 5 && rows > 0) {
@@ -141,34 +125,43 @@ public class MainActivityController extends BaseController {
         if (cols <= 5 && cols > 0) {
             validCols = true;
         } else {
-            tilMatrixColumns.setError(COLS_INVALID);
+            tilMatrixCols.setError(COLS_INVALID);
         }
         return validRows && validCols;
     }
 
-    private void getRowAndColumnsValues() throws NumberFormatException {
+    private void getRowAndColsValues() throws NumberFormatException {
         rows = Integer.parseInt(etMatrixRows.getText().toString());
-        columns = Integer.parseInt(etMatrixColumns.getText().toString());
-        matrixValues = new String[rows * columns];
+        cols = Integer.parseInt(etMatrixCols.getText().toString());
+        matrixValues = new String[rows * cols];
         Arrays.fill(matrixValues, "");
     }
 
     private InputMatrixAdapter createCustomAdapter() {
-        adapter = new InputMatrixAdapter(matrixValues, columns);
+        adapter = new InputMatrixAdapter(view, matrixValues, cols);
         return adapter;
     }
 
     private GridLayoutManager createCustomAdapterLayoutManager() {
-        return new GridLayoutManager(context, columns, LinearLayoutManager.VERTICAL, false);
+        return new GridLayoutManager(context, cols, LinearLayoutManager.VERTICAL, false);
     }
 
     private void buildMatrixView() {
-        getRowAndColumnsValues();
+        getRowAndColsValues();
         view.buildMatrixView(createCustomAdapter(), createCustomAdapterLayoutManager());
     }
 
-    private void displayButtons() {
-        view.displayButtons();
+    private void displayButtons(boolean isSquareMatrix) {
+
+        if (isSquareMatrix) {
+            view.displayDeterminantButton();
+            view.displayGaussJordanButton();
+            view.displayInverseMatrixButton();
+        } else {
+            view.hideDeterminantButton();
+            view.displayGaussJordanButton();
+            view.hideInverseMatrixButton();
+        }
     }
 
     private boolean checkIfMatrixIsFull() throws NumberFormatException {
@@ -185,7 +178,7 @@ public class MainActivityController extends BaseController {
             Double.parseDouble(value);
             return true;
         } catch (NumberFormatException e) {
-            Log.d(TAG, e.getMessage() != null ? e.getMessage() : "null");
+            Snackbar.make(rlMainActivity, SMART_ASS, Snackbar.LENGTH_LONG);
             return false;
         }
     }

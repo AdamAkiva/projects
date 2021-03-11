@@ -2,10 +2,9 @@ package com.aa.matrix.models;
 
 public class BaseModel {
 
+    private static BaseModel instance;
     private Matrix matrix;
     private Vector freeColumn;
-
-    private static BaseModel instance;
 
     public static BaseModel getInstance() {
         if (instance == null) {
@@ -14,19 +13,19 @@ public class BaseModel {
         return instance;
     }
 
-    public void setMatrix(Matrix matrix) {
-        this.matrix = matrix;
-    }
-
-    public void setFreeColumn(Vector freeColumn) {
-        this.freeColumn = freeColumn;
-    }
-
     public Matrix getMatrix() {
         return matrix;
     }
 
+    public void setMatrix(Matrix matrix) {
+        this.matrix = matrix;
+    }
+
     public Vector getFreeColumn() {
         return freeColumn;
+    }
+
+    public void setFreeColumn(Vector freeColumn) {
+        this.freeColumn = freeColumn;
     }
 }

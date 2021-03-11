@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rlMainActivity"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,8 +11,8 @@
         android:id="@+id/llTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tvTitle"
@@ -21,8 +21,8 @@
             android:layout_marginTop="50dp"
             android:text="@string/mainActivityTitle"
             android:textAlignment="center"
-            android:textSize="20sp"
             android:textColor="@android:color/black"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -31,17 +31,17 @@
         android:id="@+id/llMatrixInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_below="@id/llTitle"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        android:layout_marginTop="30dp"
-        android:layout_below="@id/llTitle">
+        android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilMatrixRows"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:hint="@string/rows"
             android:layout_marginEnd="30dp"
+            android:hint="@string/rows"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -55,14 +55,14 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilMatrixColumns"
+            android:id="@+id/tilMatrixCols"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:hint="@string/columns"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etMatrixColumns"
+                android:id="@+id/etMatrixCols"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
@@ -77,19 +77,19 @@
         android:id="@+id/llCreateMatrixInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal"
+        android:layout_below="@+id/llMatrixInput"
         android:layout_marginTop="20dp"
-        android:layout_below="@+id/llMatrixInput">
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/btnSubmitMatrixSize"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@android:string/ok"
             android:textAlignment="center"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -98,8 +98,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/llCreateMatrixInput"
-        android:layout_marginTop="35dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="20dp"
         android:gravity="center"
         android:visibility="gone">
@@ -115,10 +115,10 @@
         android:id="@+id/llFillZeroes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
         android:layout_below="@id/llMatrixLayout"
+        android:layout_marginTop="20dp"
         android:gravity="center"
+        android:orientation="horizontal"
         android:visibility="gone">
 
         <com.google.android.material.checkbox.MaterialCheckBox
@@ -131,12 +131,12 @@
             android:id="@+id/tvMainActivityFillWithZeroes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingBottom="3.5dp"
             android:text="@string/fillWithZeroes"
             android:textAlignment="center"
-            android:textSize="14sp"
             android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:paddingBottom="3.5dp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
@@ -145,55 +145,55 @@
         android:id="@+id/llCalculationOptions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_below="@id/llFillZeroes"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:weightSum="3"
-        android:layout_below="@id/llFillZeroes">
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/btnDeterminant"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:clickable="false"
             android:text="@string/determinant"
             android:textAlignment="center"
             android:textAllCaps="false"
-            android:textSize="14sp"
-            android:clickable="false"
+            android:textSize="12sp"
             android:visibility="invisible" />
 
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/btnGauss"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:clickable="false"
             android:text="@string/gauss"
             android:textAlignment="center"
             android:textAllCaps="false"
-            android:textSize="14sp"
-            android:clickable="false"
+            android:textSize="12sp"
             android:visibility="invisible" />
 
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/btnInverse"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:clickable="false"
             android:text="@string/inverse"
             android:textAlignment="center"
             android:textAllCaps="false"
-            android:textSize="14sp"
-            android:clickable="false"
+            android:textSize="12sp"
             android:visibility="invisible" />
 
     </LinearLayout>
