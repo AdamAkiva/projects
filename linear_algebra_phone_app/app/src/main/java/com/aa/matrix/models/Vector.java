@@ -2,14 +2,12 @@ package com.aa.matrix.models;
 
 import java.util.Arrays;
 
-public class Vector {
+public class Vector extends BaseModel {
 
     private final double[] vector;
-    private final int size;
 
     public Vector(final double[] vector) {
         this.vector = vector;
-        this.size = vector.length;
     }
 
     public static Vector convertStringArrayToVector(String[] vectorValuesString)
@@ -26,7 +24,7 @@ public class Vector {
         return Arrays.copyOf(vector, vector.length);
     }
 
-    public double[] getVector() {
+    public double[] getVectorAs1DArray() {
         return vector;
     }
 }

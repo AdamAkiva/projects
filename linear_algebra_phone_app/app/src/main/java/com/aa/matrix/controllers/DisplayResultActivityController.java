@@ -66,14 +66,14 @@ public class DisplayResultActivityController extends BaseController {
             InvalidParameterException {
         Callable<CalculationResult> result;
         if (matrixOperation == DETERMINANT) {
-            result = new CalculateDeterminant(matrix.getMatrix(), matrix.getRowsCount(),
-                    matrix.getColumnCount());
+            result = new CalculateDeterminant(matrix.getMatrixAs2DArray(), matrix.getRows(),
+                    matrix.getCols());
         } else if (matrixOperation == GAUSS_JORDAN) {
-            result = new CalculateGaussJordan(matrix.getMatrix(), matrix.getRowsCount(),
-                    matrix.getColumnCount(), freeColumn.getVector());
+            result = new CalculateGaussJordan(matrix.getMatrixAs2DArray(), matrix.getRows(),
+                    matrix.getCols(), freeColumn.getVectorAs1DArray(), "x");
         } else if (matrixOperation == INVERSE_MATRIX) {
-            result = new CalculateInverseMatrix(matrix.getMatrix(), matrix.getRowsCount(),
-                    matrix.getColumnCount());
+            result = new CalculateInverseMatrix(matrix.getMatrixAs2DArray(), matrix.getRows(),
+                    matrix.getCols());
         } else {
             throw new InvalidParameterException("Should not happen");
         }

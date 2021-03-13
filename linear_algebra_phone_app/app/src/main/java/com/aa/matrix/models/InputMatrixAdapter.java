@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aa.matrix.R;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.ViewHolder> {
@@ -47,16 +46,16 @@ public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.
     @Override
     public void onBindViewHolder(final @NonNull ViewHolder vh, final int position) {
         if (giveFocusToFirstElementOnViewCreation && position == 0) {
-            vh.editText.requestFocus();
+            vh.layout.getEditText().requestFocus();
             giveFocusToFirstElementOnViewCreation = false;
         }
         setHint(vh);
-        vh.editText.setText(matrixValues[position]);
-        vh.editText.addTextChangedListener(updateMatrixValuesListener(vh, position));
+        vh.layout.getEditText().setText(matrixValues[position]);
+        vh.layout.getEditText().addTextChangedListener(updateMatrixValuesListener(vh, position));
         if (vh.getAdapterPosition() != getItemCount() - 1) {
-            vh.editText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+            vh.layout.getEditText().setImeOptions(EditorInfo.IME_ACTION_NEXT);
         } else {
-            vh.editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            vh.layout.getEditText().setImeOptions(EditorInfo.IME_ACTION_DONE);
         }
     }
 
@@ -106,7 +105,7 @@ public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.
 
             @Override
             public void afterTextChanged(Editable s) {
-                matrixValues[position] = vh.editText.getText().toString();
+                matrixValues[position] = vh.layout.getEditText().getText().toString();
             }
         };
     }
@@ -119,12 +118,10 @@ public class InputMatrixAdapter extends RecyclerView.Adapter<InputMatrixAdapter.
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextInputLayout layout;
-        private final TextInputEditText editText;
 
         private ViewHolder(View v) {
             super(v);
             layout = v.findViewById(R.id.tilMatrixCell);
-            editText = v.findViewById(R.id.etMatrixCell);
         }
     }
 }

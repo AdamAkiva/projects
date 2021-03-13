@@ -1,12 +1,10 @@
 package com.aa.matrix.models;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class CalculationResult {
+public class CalculationResult extends BaseModel {
 
     private static final String TEXT_VIEW_SEPARATOR = "--------------------------------------------" +
             "------------";
@@ -20,12 +18,6 @@ public class CalculationResult {
         this.cols = cols;
         this.result = "";
         steps = new LinkedHashMap<>();
-    }
-
-    public static String doubleToString(double value) {
-        DecimalFormat df = new DecimalFormat("#.##");
-        df.setRoundingMode(RoundingMode.UP);
-        return df.format(value);
     }
 
     public void setResult(String result) {
@@ -48,7 +40,7 @@ public class CalculationResult {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                sb.append(doubleToString(matrix[i][j])).append("\t");
+                sb.append(doubleToString(matrix[i][j])).append("   ");
             }
             sb.append("\n");
         }

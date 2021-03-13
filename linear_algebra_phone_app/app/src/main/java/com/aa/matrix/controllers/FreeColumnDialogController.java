@@ -14,7 +14,6 @@ import com.aa.matrix.views.FreeColumnDialogView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class FreeColumnDialogController extends BaseController {
@@ -28,7 +27,6 @@ public class FreeColumnDialogController extends BaseController {
     private final int rows;
 
     private final TextInputLayout[] textInputLayouts;
-    private final TextInputEditText[] textInputEditTexts;
 
     public FreeColumnDialogController(final Activity callerActivity, final int rows) {
         this.callerActivity = callerActivity;
@@ -38,7 +36,6 @@ public class FreeColumnDialogController extends BaseController {
         this.view = new FreeColumnDialogView(callerActivity);
         this.rows = rows;
         textInputLayouts = new TextInputLayout[rows];
-        textInputEditTexts = new TextInputEditText[rows];
     }
 
     private CompoundButton.OnCheckedChangeListener fillEmptyInputsWithZeroesEvent() {
@@ -58,11 +55,11 @@ public class FreeColumnDialogController extends BaseController {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String[] freeColumnValues = new String[textInputEditTexts.length];
-                for (int i = 0; i < textInputEditTexts.length; i++) {
-                    String value = freeColumnValues[i];
-                    if (value != null && !value.isEmpty()) {
-                        freeColumnValues[i] = textInputEditTexts[i].getText().toString();
+                String[] freeColumnValues = new String[textInputLayouts.length];
+                for (int i = 0; i < textInputLayouts.length; i++) {
+                    String value = textInputLayouts[i].getEditText().getText().toString();
+                    if (!value.isEmpty()) {
+                        freeColumnValues[i] = value;
                     } else {
                         Snackbar.make(view.getRootView(), VECTOR_MUST_BE_FULL, Snackbar.LENGTH_LONG).show();
                     }
@@ -140,31 +137,27 @@ public class FreeColumnDialogController extends BaseController {
             if (parent instanceof TextInputLayout) {
                 textInputLayouts[i] = (TextInputLayout) parent;
             }
-            View view = ((ViewGroup) parent.getChildAt(0)).getChildAt(1);
-            if (view instanceof TextInputEditText) {
-                textInputEditTexts[i] = (TextInputEditText) view;
-            }
         }
     }
 
     private void setHintsForTextInputEditTextFields() {
         for (int i = 0; i < textInputLayouts.length; i++) {
-            textInputLayouts[i].setHint(view.getContext().getResources().getString(R.string.freeColumnCellHint, i));
+            textInputLayouts[i].setHint(view.getContext().getResources().getString(R.string.freeColumnCellHint, i + 1));
         }
     }
 
     private void fillEmptyInputsWithZeroes() {
-        for (TextInputEditText textInputEditText : textInputEditTexts) {
-            if (textInputEditText.getText().toString().equals(EMPTY_STRING)) {
-                textInputEditText.setText(String.valueOf(0));
+        for (TextInputLayout textInputEditText : textInputLayouts) {
+            if (textInputEditText.getEditText().getText().toString().equals(EMPTY_STRING)) {
+                textInputEditText.getEditText().setText(String.valueOf(0));
             }
         }
     }
 
     private void emptyInputsWithZeroes() {
-        for (TextInputEditText textInputEditText : textInputEditTexts) {
-            if (textInputEditText.getText().toString().equals(String.valueOf(0))) {
-                textInputEditText.setText(EMPTY_STRING);
+        for (TextInputLayout textInputEditText : textInputLayouts) {
+            if (textInputEditText.getEditText().getText().toString().equals(String.valueOf(0))) {
+                textInputEditText.getEditText().setText(EMPTY_STRING);
             }
         }
     }

@@ -17,7 +17,6 @@ import com.aa.matrix.models.Matrix;
 import com.aa.matrix.views.DisplayResultActivityView;
 import com.aa.matrix.views.MainActivityView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Arrays;
@@ -29,8 +28,6 @@ public class MainActivityController extends BaseController {
     private final MainActivityView view;
     private final Context context;
     private final RelativeLayout rlMainActivity;
-    private final TextInputEditText etMatrixRows;
-    private final TextInputEditText etMatrixCols;
     private final TextInputLayout tilMatrixRows;
     private final TextInputLayout tilMatrixCols;
     private InputMatrixAdapter adapter;
@@ -43,9 +40,7 @@ public class MainActivityController extends BaseController {
         this.context = view;
         rlMainActivity = ((Activity) this.context).findViewById(R.id.rlMainActivity);
         tilMatrixRows = ((Activity) this.context).findViewById(R.id.tilMatrixRows);
-        etMatrixRows = ((Activity) this.context).findViewById(R.id.etMatrixRows);
         tilMatrixCols = ((Activity) this.context).findViewById(R.id.tilMatrixCols);
-        etMatrixCols = ((Activity) this.context).findViewById(R.id.etMatrixCols);
     }
 
     public View.OnClickListener buildOnSubmitMatrixSizeListener() {
@@ -113,8 +108,8 @@ public class MainActivityController extends BaseController {
     }
 
     private boolean checkIfMatrixCanBeBuilt() throws NumberFormatException {
-        int rows = Integer.parseInt(etMatrixRows.getText().toString());
-        int cols = Integer.parseInt(etMatrixCols.getText().toString());
+        int rows = Integer.parseInt(tilMatrixRows.getEditText().getText().toString());
+        int cols = Integer.parseInt(tilMatrixCols.getEditText().getText().toString());
         boolean validRows = false;
         boolean validCols = false;
         if (rows <= 5 && rows > 0) {
@@ -131,8 +126,8 @@ public class MainActivityController extends BaseController {
     }
 
     private void getRowAndColsValues() throws NumberFormatException {
-        rows = Integer.parseInt(etMatrixRows.getText().toString());
-        cols = Integer.parseInt(etMatrixCols.getText().toString());
+        rows = Integer.parseInt(tilMatrixRows.getEditText().getText().toString());
+        cols = Integer.parseInt(tilMatrixCols.getEditText().getText().toString());
         matrixValues = new String[rows * cols];
         Arrays.fill(matrixValues, "");
     }

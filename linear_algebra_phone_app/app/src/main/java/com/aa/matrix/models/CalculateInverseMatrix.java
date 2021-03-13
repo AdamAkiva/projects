@@ -3,7 +3,7 @@ package com.aa.matrix.models;
 import java.util.concurrent.Callable;
 
 // Do this
-public class CalculateInverseMatrix implements Callable<CalculationResult> {
+public class CalculateInverseMatrix extends BaseModel implements Callable<CalculationResult> {
 
     private final double[][] m;
     private final int rows;

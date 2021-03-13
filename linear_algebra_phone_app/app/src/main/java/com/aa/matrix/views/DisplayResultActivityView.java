@@ -48,8 +48,8 @@ public class DisplayResultActivityView extends BaseActivity {
     }
 
     public void displayGaussJordanResult(CalculationResult result) {
-//        String textToDisplay = result.toString();
-//        tvDisplayResult.setText(textToDisplay);
+        String textToDisplay = result.toString();
+        tvDisplayResult.setText(textToDisplay);
     }
 
     public void displayInverseMatrixResult(CalculationResult result) {

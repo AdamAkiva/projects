@@ -3,7 +3,7 @@ package com.aa.matrix.models;
 import java.util.Locale;
 import java.util.concurrent.Callable;
 
-public class CalculateDeterminant implements Callable<CalculationResult> {
+public class CalculateDeterminant extends BaseModel implements Callable<CalculationResult> {
 
     private static final String ONE_BY_ONE_MATRIX = "Nothing to calculate." + System.lineSeparator() +
             "Determinant = %s" + System.lineSeparator();
@@ -11,7 +11,6 @@ public class CalculateDeterminant implements Callable<CalculationResult> {
             + "To calculate 2x2 determinant:" + System.lineSeparator() + "(%s * %s) - (%s * %s) = %s"
             + System.lineSeparator();
     private static final String DETERMINANT = "Determinant =";
-    private static final String BASE_MATRIX = "Inputted matrix:" + System.lineSeparator();
     private static final String SWAPPED_VECTORS = "Swapped row %d with row %d" + System.lineSeparator();
     private static final String RESTORE_VECTOR = "Restored row %d" + System.lineSeparator();
     private static final String MULTIPLE_VECTOR = "Multiple row %d by %s" + System.lineSeparator();
@@ -58,7 +57,7 @@ public class CalculateDeterminant implements Callable<CalculationResult> {
                         return result;
                     }
                     // If the pivot is 0 find a vector to swap with
-                    if (m[i][i] == 0) {
+                    if (round(m[i][i]) == ZERO) {
                         // If all the pivots are 0 for this iteration skip to the next iteration
                         // otherwise swap with the farthest vector and continue iteration
                         if (!findFarthestVectorToSwapWith(i)) {
@@ -67,11 +66,12 @@ public class CalculateDeterminant implements Callable<CalculationResult> {
                     }
                     // Gets here if either the pivot is not 0 or there was a vector swap with
                     double[] r = Vector.hardCopyVector(m[i]);
-                    if (r[i] != 1) {
+                    if (round(r[i]) != ZERO) {
                         changeVectorPivotToOne(i);
                     }
                     double mValue = findMultiplicationValue(i, j);
-                    if (mValue != 1f && mValue != -1f) {
+                    if (round(mValue) != ZERO
+                            && round(mValue) != ZERO) {
                         multipleVectorByValue(i, mValue);
                     }
                     addOrSubtractVectors(i, j);
@@ -85,27 +85,26 @@ public class CalculateDeterminant implements Callable<CalculationResult> {
     }
 
     private void oneByOneMatrix() {
-        result.setResult(String.format(ONE_BY_ONE_MATRIX, CalculationResult.doubleToString(m[0][0])));
+        result.setResult(String.format(ONE_BY_ONE_MATRIX, doubleToString(m[0][0])));
     }
 
     private void twoByTwoMatrix() {
-        double value = (m[0][0] * m[1][1]) - (m[0][1] * m[1][0]);
-        result.setResult(String.format(Locale.US, TWO_BY_TWO_MATRIX, CalculationResult.doubleToString(m[0][0]),
-                CalculationResult.doubleToString(m[1][1]), CalculationResult.doubleToString(m[0][1]),
-                CalculationResult.doubleToString(m[1][0]), value));
+        double value = (m[0][0] * (m[1][1])) - ((m[0][1] * (m[1][0])));
+        result.setResult(String.format(Locale.US, TWO_BY_TWO_MATRIX, doubleToString(m[0][0]), doubleToString(m[1][1]),
+                doubleToString(m[0][1]), doubleToString(m[1][0]), doubleToString(value)));
     }
 
     private int checkForAZeroVector() {
         for (int i = 0; i < rows; i++) {
             boolean zeroVector = true;
             for (int j = 0; j < cols; j++) {
-                if (m[i][j] != 0) {
+                if (round(m[i][j]) == ZERO) {
                     zeroVector = false;
                     break;
                 }
             }
             if (zeroVector) {
-                result.setResult(String.format(Locale.US, ZERO_VECTOR, i));
+                result.setResult(String.format(Locale.US, ZERO_VECTOR, i + 1));
                 return i;
             }
         }
@@ -115,7 +114,7 @@ public class CalculateDeterminant implements Callable<CalculationResult> {
     private boolean checkIfCalculationsAreDone() {
         for (int i = 1; i < rows; i++) {
             for (int j = 0; j < i; j++) {
-                if (m[i][j] != 0) {
+                if (round(m[i][j]) != ZERO) {
                     return false;
                 }
             }
@@ -126,7 +125,7 @@ public class CalculateDeterminant implements Callable<CalculationResult> {
 
     private boolean findFarthestVectorToSwapWith(int row) {
         for (int i = row + 1; i < rows; i++) {
-            if (m[rows - i][i - 1] != 0) {
+            if (round(m[rows - i][i - 1]) != ZERO) {
                 swapVectors(row, rows - i);
                 return true;
             }
@@ -145,38 +144,40 @@ public class CalculateDeterminant implements Callable<CalculationResult> {
 
     private void changeVectorPivotToOne(int index) {
         double[] r = m[index];
-        double multipleBy = 1 / r[index];
+        double multipleBy = round(ONE / r[index]);
         for (int i = index; i < r.length; i++) {
-            r[i] *= multipleBy;
+            r[i] = round(r[i] * multipleBy);
         }
-        result.put(String.format(Locale.US, MULTIPLE_VECTOR, index + 1, CalculationResult.doubleToString(multipleBy)), m);
+        result.put(String.format(Locale.US, MULTIPLE_VECTOR, index + 1,
+                doubleToString(multipleBy)), m);
     }
 
     private double findMultiplicationValue(int rIndex, int nIndex) {
         double[] r = m[rIndex];
         double[] n = m[nIndex];
-        return 1.0 / (r[rIndex] / n[rIndex]);
+        return round(ONE / (r[rIndex] / (n[rIndex])));
     }
 
     private void multipleVectorByValue(int index, double value) {
         double[] r = m[index];
         for (int i = index; i < r.length; i++) {
-            r[i] *= value;
+            r[i] = round(r[i] * (value));
         }
-        result.put(String.format(Locale.US, MULTIPLE_VECTOR, index + 1, CalculationResult.doubleToString(value)), m);
+        result.put(String.format(Locale.US, MULTIPLE_VECTOR, index + 1,
+                doubleToString(value)), m);
     }
 
     private void addOrSubtractVectors(int rIndex, int nIndex) {
         double[] r = m[rIndex];
         double[] n = m[nIndex];
-        if (r[rIndex] + n[rIndex] == 0) {
+        if (r[rIndex] + (n[rIndex]) == ZERO) {
             for (int i = rIndex; i < r.length; i++) {
-                n[i] += r[i];
+                n[i] = round(n[i] + r[i]);
             }
             result.put(String.format(Locale.US, ADDED_VECTOR, rIndex + 1, nIndex + 1), m);
         } else {
             for (int i = rIndex; i < r.length; i++) {
-                n[i] -= r[i];
+                n[i] = round(n[i] - r[i]);
             }
             result.put(String.format(Locale.US, SUBTRACT_VECTOR, rIndex + 1, nIndex + 1), m);
         }
@@ -188,20 +189,20 @@ public class CalculateDeterminant implements Callable<CalculationResult> {
         sb.append(DETERMINANT).append(" ");
         // Check if the number of swaps is not even, if so swap the mark of the result
         if (swapCount % 2 != 0) {
-            res = -1f;
+            res = NEGATIVE_ONE;
             sb.append("-1 (from row swaps) ");
         } else {
-            res = 1f;
+            res = ONE;
         }
         for (int i = 0; i < rows; i++) {
-            res *= m[i][i];
+            res = round(res * (m[i][i]));
             if (i == rows - 1) {
-                sb.append(CalculationResult.doubleToString(m[i][i])).append(" = ");
+                sb.append(doubleToString(m[i][i])).append(" = ");
             } else {
-                sb.append(CalculationResult.doubleToString(m[i][i])).append(" * ");
+                sb.append(doubleToString(m[i][i])).append(" * ");
             }
         }
-        result.setResult(MULTIPLE_DIAGONAL_LINE + sb.toString() +
-                CalculationResult.doubleToString(res) + System.lineSeparator());
+        result.setResult(MULTIPLE_DIAGONAL_LINE + sb.toString() + doubleToString(res) +
+                System.lineSeparator());
     }
 }
