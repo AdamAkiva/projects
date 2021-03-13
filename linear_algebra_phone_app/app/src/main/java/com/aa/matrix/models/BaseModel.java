@@ -13,6 +13,7 @@ public class BaseModel {
     protected static final double ONE = 1.00;
     // How close a decimal number can be to be rounded up to an integer value
     private static final double PRECISION = 0.05;
+
     private static BaseModel instance;
     private Matrix matrix;
     private Vector freeColumn;
@@ -41,10 +42,13 @@ public class BaseModel {
     }
 
     protected double round(double value) {
-        if (Math.abs(value) + PRECISION > Math.ceil(Math.abs(value))) {
-            return Math.ceil(value);
-        } else if (Math.abs(value) - PRECISION < Math.floor(Math.abs(value))) {
-            return Math.floor(value);
+        // If the |value| is PRECISION close to an integer value round it,
+        // Else return the number with 2 decimal places rounded half up.
+        // BigDecimal.valueOf used to prevent a return value of -0.00
+        if (value + PRECISION > Math.ceil(value)) {
+            return BigDecimal.valueOf(Math.ceil(value)).doubleValue();
+        } else if (value - PRECISION < Math.floor(value)) {
+            return BigDecimal.valueOf(Math.floor(value)).doubleValue();
         } else {
             BigDecimal bd = BigDecimal.valueOf(value);
             bd = bd.setScale(DECIMAL_NUMBERS, RoundingMode.HALF_UP);
@@ -53,6 +57,8 @@ public class BaseModel {
     }
 
     protected String doubleToString(double value) {
+        // Display to the user the matrix with two decimal places,
+        // to stay consistent.
         DecimalFormat dc = new DecimalFormat("0.00");
         return dc.format(value);
     }

@@ -48,7 +48,15 @@ public class MainActivityController extends BaseController {
             @Override
             public void onClick(View v) {
                 try {
+                    if (tilMatrixRows.getEditText().getText().toString().equals("1") ||
+                            tilMatrixCols.getEditText().getText().toString().equals("1")) {
+                        tilMatrixRows.setError(NOT_A_MATRIX);
+                        tilMatrixCols.setError(NOT_A_MATRIX);
+                        return;
+                    }
                     if (checkIfMatrixCanBeBuilt()) {
+                        tilMatrixRows.setError("");
+                        tilMatrixCols.setError("");
                         buildMatrixView();
                         view.displayCheckBoxRow();
                         displayButtons(rows == cols);

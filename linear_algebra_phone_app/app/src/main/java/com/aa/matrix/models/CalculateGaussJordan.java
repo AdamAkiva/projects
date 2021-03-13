@@ -97,9 +97,9 @@ public class CalculateGaussJordan extends BaseModel implements Callable<Calculat
                 if (j != cols - 1 && m[i][j] != ZERO) {
                     double value = m[i][j] * NEGATIVE_ONE;
                     if (value > 0) {
-                        values.append(" +").append(doubleToString(value)).append(freeVarName).append(j);
+                        values.append(" +").append(doubleToString(value)).append(freeVarName).append(j + 1);
                     } else {
-                        values.append(" ").append(doubleToString(value)).append(freeVarName).append(j);
+                        values.append(" ").append(doubleToString(value)).append(freeVarName).append(j + 1);
                     }
 
                     // Free vector

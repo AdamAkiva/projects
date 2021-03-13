@@ -5,8 +5,6 @@ import java.util.concurrent.Callable;
 
 public class CalculateDeterminant extends BaseModel implements Callable<CalculationResult> {
 
-    private static final String ONE_BY_ONE_MATRIX = "Nothing to calculate." + System.lineSeparator() +
-            "Determinant = %s" + System.lineSeparator();
     private static final String TWO_BY_TWO_MATRIX = "Used the shortcut way" + System.lineSeparator()
             + "To calculate 2x2 determinant:" + System.lineSeparator() + "(%s * %s) - (%s * %s) = %s"
             + System.lineSeparator();
@@ -38,10 +36,7 @@ public class CalculateDeterminant extends BaseModel implements Callable<Calculat
     @Override
     public CalculationResult call() {
         int mSize = rows * cols;
-        if (mSize == 1) {
-            // If mat is size 1x1
-            oneByOneMatrix();
-        } else if (mSize == 4) {
+        if (mSize == 4) {
             // If mat is size 2x2
             twoByTwoMatrix();
         } else {
@@ -71,7 +66,7 @@ public class CalculateDeterminant extends BaseModel implements Callable<Calculat
                     }
                     double mValue = findMultiplicationValue(i, j);
                     if (round(mValue) != ZERO
-                            && round(mValue) != ZERO) {
+                            && round(mValue) != ONE) {
                         multipleVectorByValue(i, mValue);
                     }
                     addOrSubtractVectors(i, j);
@@ -84,10 +79,6 @@ public class CalculateDeterminant extends BaseModel implements Callable<Calculat
         return result;
     }
 
-    private void oneByOneMatrix() {
-        result.setResult(String.format(ONE_BY_ONE_MATRIX, doubleToString(m[0][0])));
-    }
-
     private void twoByTwoMatrix() {
         double value = (m[0][0] * (m[1][1])) - ((m[0][1] * (m[1][0])));
         result.setResult(String.format(Locale.US, TWO_BY_TWO_MATRIX, doubleToString(m[0][0]), doubleToString(m[1][1]),
@@ -98,7 +89,7 @@ public class CalculateDeterminant extends BaseModel implements Callable<Calculat
         for (int i = 0; i < rows; i++) {
             boolean zeroVector = true;
             for (int j = 0; j < cols; j++) {
-                if (round(m[i][j]) == ZERO) {
+                if (round(m[i][j]) != ZERO) {
                     zeroVector = false;
                     break;
                 }

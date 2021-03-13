@@ -14,8 +14,9 @@ public abstract class BaseController {
     public static final String OPERATION = "Operation: ";
 
     public static final CharSequence INPUT_VALUES = "Please input rows and cols values";
-    public static final String ROWS_INVALID = "Between 1 to 5";
-    public static final String COLS_INVALID = "Between 1 to 5";
+    public static final CharSequence NOT_A_MATRIX = "Please input a matrix, not a vector";
+    public static final String ROWS_INVALID = "Between 2 to 5";
+    public static final String COLS_INVALID = "Between 2 to 5";
     public static final String EMPTY_STRING = "";
     public static final CharSequence SMART_ASS = "Why are you a smartass?";
     public static final CharSequence MATRIX_MUST_BE_FULL = "Matrix must be full";
