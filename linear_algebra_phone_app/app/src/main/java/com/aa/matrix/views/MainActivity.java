@@ -16,7 +16,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 
-public class MainActivityView extends BaseActivity {
+public class MainActivity extends BaseActivity {
 
     private RelativeLayout rlMainActivity;
 
@@ -26,7 +26,6 @@ public class MainActivityView extends BaseActivity {
 
     private RecyclerView rvMatrix;
 
-    private MaterialButton btnSubmitMatrixSize;
     private MaterialButton btnDeterminant;
     private MaterialButton btnGauss;
     private MaterialButton btnInverse;
@@ -41,7 +40,7 @@ public class MainActivityView extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         rlMainActivity = findViewById(R.id.rlMainActivity);
-        btnSubmitMatrixSize = findViewById(R.id.btnSubmitMatrixSize);
+        MaterialButton btnSubmitMatrixSize = findViewById(R.id.btnSubmitMatrixSize);
         llMatrixLayout = findViewById(R.id.llMatrixLayout);
         llFillZeroes = findViewById(R.id.llFillZeroes);
         rvMatrix = findViewById(R.id.rvInputMatrix);
@@ -59,12 +58,20 @@ public class MainActivityView extends BaseActivity {
     public void buildMatrixView(InputMatrixAdapter adapter, GridLayoutManager layoutManager) {
         if (llMatrixLayout.getVisibility() == View.INVISIBLE || llMatrixLayout.getVisibility() == View.GONE) {
             llMatrixLayout.setVisibility(View.VISIBLE);
+            rvMatrix.setLayoutManager(layoutManager);
+            if (rvMatrix.getAdapter() != null) {
+                rvMatrix.swapAdapter(adapter, true);
+            } else {
+                rvMatrix.setAdapter(adapter);
+            }
         }
-        rvMatrix.setLayoutManager(layoutManager);
-        if (rvMatrix.getAdapter() != null) {
-            rvMatrix.swapAdapter(adapter, true);
-        } else {
-            rvMatrix.setAdapter(adapter);
+    }
+
+    public void hideMatrixView() {
+        if (llMatrixLayout.getVisibility() == View.VISIBLE) {
+            llMatrixLayout.setVisibility(View.GONE);
+            rvMatrix.setLayoutManager(null);
+            rvMatrix.setAdapter(null);
         }
     }
 
@@ -73,6 +80,14 @@ public class MainActivityView extends BaseActivity {
             llFillZeroes.setVisibility(View.VISIBLE);
             cbFillZeroes.setOnFocusChangeListener(controller.buildHideKeyboardListener(rlMainActivity, this));
             cbFillZeroes.setOnCheckedChangeListener(controller.buildOnCheckedChangeListener());
+        }
+    }
+
+    public void hideCheckBoxRow() {
+        if (llFillZeroes.getVisibility() == View.VISIBLE) {
+            llFillZeroes.setVisibility(View.GONE);
+            cbFillZeroes.setOnFocusChangeListener(null);
+            cbFillZeroes.setOnCheckedChangeListener(null);
         }
     }
 

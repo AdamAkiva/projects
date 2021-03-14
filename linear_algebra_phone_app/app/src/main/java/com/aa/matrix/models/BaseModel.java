@@ -6,17 +6,19 @@ import java.text.DecimalFormat;
 
 public class BaseModel {
 
-    protected static final String BASE_MATRIX = "Inputted matrix:" + System.lineSeparator();
-    protected static final int DECIMAL_NUMBERS = 2;
-    protected static final double NEGATIVE_ONE = -1.00;
-    protected static final double ZERO = 0.00;
-    protected static final double ONE = 1.00;
+    public static final String BASE_MATRIX = "Inputted matrix:" + System.lineSeparator();
+    public static final String BASE_MATRICES = "Inputted matrix and a" + System.lineSeparator() +
+            "Matching identity matrix:" + System.lineSeparator();
+
+    public static final int DECIMAL_NUMBERS = 2;
+    public static final double NEGATIVE_ONE = -1.00;
+    public static final double ZERO = 0.00;
+    public static final double ONE = 1.00;
     // How close a decimal number can be to be rounded up to an integer value
-    private static final double PRECISION = 0.05;
+    public static final double PRECISION = 0.05;
 
     private static BaseModel instance;
     private Matrix matrix;
-    private Vector freeColumn;
 
     public static BaseModel getInstance() {
         if (instance == null) {
@@ -25,23 +27,7 @@ public class BaseModel {
         return instance;
     }
 
-    public Matrix getMatrix() {
-        return matrix;
-    }
-
-    public void setMatrix(Matrix matrix) {
-        this.matrix = matrix;
-    }
-
-    public Vector getFreeColumn() {
-        return freeColumn;
-    }
-
-    public void setFreeColumn(Vector freeColumn) {
-        this.freeColumn = freeColumn;
-    }
-
-    protected double round(double value) {
+    public static double round(double value) {
         // If the |value| is PRECISION close to an integer value round it,
         // Else return the number with 2 decimal places rounded half up.
         // BigDecimal.valueOf used to prevent a return value of -0.00
@@ -56,10 +42,37 @@ public class BaseModel {
         }
     }
 
-    protected String doubleToString(double value) {
+    public static String doubleToString(double value) {
         // Display to the user the matrix with two decimal places,
         // to stay consistent.
         DecimalFormat dc = new DecimalFormat("0.00");
         return dc.format(value);
+    }
+
+    public void setMatrixObject(int calculationType, double[][] matrix, int rows, int cols) {
+        this.matrix = new Matrix(calculationType, matrix, rows, cols);
+    }
+
+    public void setMatrixObject(int calculationType, double[][] matrix, double[] freeColumn, int rows, int cols) {
+        this.matrix = new Matrix(calculationType, attachFreeVectorToMatrix(matrix, freeColumn, rows, cols),
+                rows, cols + 1);
+    }
+
+    public Matrix getMatrixObject() {
+        return matrix;
+    }
+
+    private double[][] attachFreeVectorToMatrix(double[][] m, double[] v, int rows, int cols) {
+        double[][] nM = new double[rows][cols + 1];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j <= cols; j++) {
+                if (j == cols) {
+                    nM[i][j] = v[i];
+                } else {
+                    nM[i][j] = m[i][j];
+                }
+            }
+        }
+        return nM;
     }
 }

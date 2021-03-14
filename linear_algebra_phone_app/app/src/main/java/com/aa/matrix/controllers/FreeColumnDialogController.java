@@ -8,9 +8,11 @@ import android.widget.LinearLayout;
 
 import com.aa.matrix.R;
 import com.aa.matrix.models.BaseModel;
+import com.aa.matrix.models.Calculation;
+import com.aa.matrix.models.Matrix;
 import com.aa.matrix.models.Vector;
-import com.aa.matrix.views.DisplayResultActivityView;
-import com.aa.matrix.views.FreeColumnDialogView;
+import com.aa.matrix.views.FreeColumnDialog;
+import com.aa.matrix.views.ResultActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
@@ -22,19 +24,24 @@ public class FreeColumnDialogController extends BaseController {
 
     private final Activity callerActivity;
 
-    private final FreeColumnDialogView view;
+    private final FreeColumnDialog view;
 
     private final int rows;
+    private final int cols;
+    private final String[] matrixValues;
 
     private final TextInputLayout[] textInputLayouts;
 
-    public FreeColumnDialogController(final Activity callerActivity, final int rows) {
+    public FreeColumnDialogController(final Activity callerActivity, final String[] matrixValues,
+                                      final int rows, final int cols) {
         this.callerActivity = callerActivity;
         // Hint for later: When you create the view the onCreate is not called, it is only called,
         // when the view is displayed to the user, therefore all the view inflating MUST be called
         // only after the show() (for dialogs, for other view other methods)
-        this.view = new FreeColumnDialogView(callerActivity);
+        this.view = new FreeColumnDialog(callerActivity);
+        this.matrixValues = matrixValues;
         this.rows = rows;
+        this.cols = cols;
         textInputLayouts = new TextInputLayout[rows];
     }
 
@@ -65,11 +72,12 @@ public class FreeColumnDialogController extends BaseController {
                     }
                 }
                 try {
-                    model.setFreeColumn(Vector.convertStringArrayToVector(freeColumnValues));
+                    model.setMatrixObject(Calculation.GAUSS_JORDAN, Matrix.convertStringArrayTo2DArray(matrixValues, rows, cols),
+                            Vector.convertStringArrayTo1DArray(freeColumnValues), rows, cols);
                 } catch (NumberFormatException e) {
                     Snackbar.make(view.getRootView(), SMART_ASS, Snackbar.LENGTH_LONG).show();
                 }
-                goToResultActivity(callerActivity, DisplayResultActivityView.class, OPERATION, GAUSS_JORDAN);
+                goToResultActivity(callerActivity, ResultActivity.class, OPERATION, Calculation.GAUSS_JORDAN);
             }
         };
     }

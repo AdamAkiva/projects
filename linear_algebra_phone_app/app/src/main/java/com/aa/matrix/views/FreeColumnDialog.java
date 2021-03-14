@@ -11,12 +11,12 @@ import android.widget.LinearLayout;
 
 import com.aa.matrix.R;
 
-public class FreeColumnDialogView extends Dialog {
+public class FreeColumnDialog extends Dialog {
 
     private final LayoutInflater inflater;
     private LinearLayout llDialogView;
 
-    public FreeColumnDialogView(Activity parent) {
+    public FreeColumnDialog(Activity parent) {
         super(parent);
         inflater = LayoutInflater.from(parent);
     }

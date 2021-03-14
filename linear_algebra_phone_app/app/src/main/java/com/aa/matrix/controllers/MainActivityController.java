@@ -2,6 +2,8 @@ package com.aa.matrix.controllers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -12,10 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.aa.matrix.R;
 import com.aa.matrix.models.BaseModel;
+import com.aa.matrix.models.Calculation;
 import com.aa.matrix.models.InputMatrixAdapter;
 import com.aa.matrix.models.Matrix;
-import com.aa.matrix.views.DisplayResultActivityView;
-import com.aa.matrix.views.MainActivityView;
+import com.aa.matrix.views.MainActivity;
+import com.aa.matrix.views.ResultActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -23,9 +26,9 @@ import java.util.Arrays;
 
 public class MainActivityController extends BaseController {
 
-    private static final String TAG = MainActivityView.class.getName();
+    private static final String TAG = MainActivity.class.getName();
     private final BaseModel model = BaseModel.getInstance();
-    private final MainActivityView view;
+    private final MainActivity view;
     private final Context context;
     private final RelativeLayout rlMainActivity;
     private final TextInputLayout tilMatrixRows;
@@ -35,12 +38,39 @@ public class MainActivityController extends BaseController {
     private int rows;
     private int cols;
 
-    public MainActivityController(MainActivityView view) {
+    private boolean matrixViewVisible = false;
+
+    public MainActivityController(MainActivity view) {
         this.view = view;
         this.context = view;
         rlMainActivity = ((Activity) this.context).findViewById(R.id.rlMainActivity);
         tilMatrixRows = ((Activity) this.context).findViewById(R.id.tilMatrixRows);
         tilMatrixCols = ((Activity) this.context).findViewById(R.id.tilMatrixCols);
+
+        tilMatrixRows.getEditText().addTextChangedListener(buildOnChangeMatrixSizeListener());
+        tilMatrixCols.getEditText().addTextChangedListener(buildOnChangeMatrixSizeListener());
+    }
+
+    public TextWatcher buildOnChangeMatrixSizeListener() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (matrixViewVisible) {
+                    view.hideMatrixView();
+                    view.hideCheckBoxRow();
+                    hideButtons();
+                    matrixViewVisible = false;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
     }
 
     public View.OnClickListener buildOnSubmitMatrixSizeListener() {
@@ -55,6 +85,7 @@ public class MainActivityController extends BaseController {
                         return;
                     }
                     if (checkIfMatrixCanBeBuilt()) {
+                        matrixViewVisible = true;
                         tilMatrixRows.setError("");
                         tilMatrixCols.setError("");
                         buildMatrixView();
@@ -93,14 +124,19 @@ public class MainActivityController extends BaseController {
                     public void run() {
                         try {
                             if (checkIfMatrixIsFull()) {
-                                model.setMatrix(Matrix.convertStringArrayToMatrix(matrixValues, rows, cols));
                                 int btnId = v.getId();
                                 if (btnId == R.id.btnDeterminant) {
-                                    goToResultActivity(view, DisplayResultActivityView.class, OPERATION, DETERMINANT);
+                                    model.setMatrixObject(Calculation.DETERMINANT,
+                                            Matrix.convertStringArrayTo2DArray(matrixValues, rows, cols),
+                                            rows, cols);
+                                    goToResultActivity(view, ResultActivity.class, OPERATION, Calculation.DETERMINANT);
                                 } else if (btnId == R.id.btnGauss) {
                                     buildGaussJordenFreeColumnView();
                                 } else if (btnId == R.id.btnInverse) {
-                                    goToResultActivity(view, DisplayResultActivityView.class, OPERATION, INVERSE_MATRIX);
+                                    model.setMatrixObject(Calculation.INVERSE_MATRIX,
+                                            Matrix.convertStringArrayTo2DArray(matrixValues, rows, cols),
+                                            rows, cols);
+                                    goToResultActivity(view, ResultActivity.class, OPERATION, Calculation.INVERSE_MATRIX);
                                 }
                             } else {
                                 Snackbar.make(rlMainActivity, MATRIX_MUST_BE_FULL, Snackbar.LENGTH_LONG).show();
@@ -155,7 +191,6 @@ public class MainActivityController extends BaseController {
     }
 
     private void displayButtons(boolean isSquareMatrix) {
-
         if (isSquareMatrix) {
             view.displayDeterminantButton();
             view.displayGaussJordanButton();
@@ -165,6 +200,12 @@ public class MainActivityController extends BaseController {
             view.displayGaussJordanButton();
             view.hideInverseMatrixButton();
         }
+    }
+
+    private void hideButtons() {
+        view.hideDeterminantButton();
+        view.hideGaussJordanButton();
+        view.hideInverseMatrixButton();
     }
 
     private boolean checkIfMatrixIsFull() throws NumberFormatException {
@@ -190,7 +231,8 @@ public class MainActivityController extends BaseController {
         this.view.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                final FreeColumnDialogController controller = new FreeColumnDialogController(view, rows);
+                final FreeColumnDialogController controller = new FreeColumnDialogController(view,
+                        matrixValues, rows, cols);
                 controller.build();
             }
         });

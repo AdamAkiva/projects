@@ -9,31 +9,23 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.aa.matrix.R;
-import com.aa.matrix.controllers.DisplayResultActivityController;
-import com.aa.matrix.models.CalculationResult;
+import com.aa.matrix.controllers.ResultActivityController;
+import com.aa.matrix.models.Calculation;
 
-import static com.aa.matrix.controllers.BaseController.OPERATION;
-
-public class DisplayResultActivityView extends BaseActivity {
+public class ResultActivity extends BaseActivity {
 
     private ProgressBar pbLoadingResult;
     private TextView tvDisplayResult;
-
-    private int opn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.display_result);
 
-        if (getIntent().getExtras() != null) {
-            opn = getIntent().getExtras().getInt(OPERATION);
-        }
-
         pbLoadingResult = findViewById(R.id.pbLoadingResult);
         tvDisplayResult = findViewById(R.id.tvResult);
 
-        new DisplayResultActivityController(this, opn);
+        new ResultActivityController(this);
     }
 
     public void hideProgressBar() {
@@ -42,19 +34,19 @@ public class DisplayResultActivityView extends BaseActivity {
         }
     }
 
-    public void displayDeterminantResult(CalculationResult result) {
+    public void displayDeterminantResult(Calculation result) {
         String textToDisplay = result.toString();
         tvDisplayResult.setText(textToDisplay);
     }
 
-    public void displayGaussJordanResult(CalculationResult result) {
+    public void displayGaussJordanResult(Calculation result) {
         String textToDisplay = result.toString();
         tvDisplayResult.setText(textToDisplay);
     }
 
-    public void displayInverseMatrixResult(CalculationResult result) {
-//        String textToDisplay = result.toString();
-//        tvDisplayResult.setText(textToDisplay);
+    public void displayInverseMatrixResult(Calculation result) {
+        String textToDisplay = result.toString();
+        tvDisplayResult.setText(textToDisplay);
     }
 
     @Override

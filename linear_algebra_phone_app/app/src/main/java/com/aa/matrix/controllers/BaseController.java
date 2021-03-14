@@ -22,10 +22,6 @@ public abstract class BaseController {
     public static final CharSequence MATRIX_MUST_BE_FULL = "Matrix must be full";
     public static final CharSequence VECTOR_MUST_BE_FULL = "Vector must be full";
 
-    public static final int DETERMINANT = 1;
-    public static final int GAUSS_JORDAN = 2;
-    public static final int INVERSE_MATRIX = 3;
-
     private static final int MAXIMUM_THREAD_NUMBER = 5;
     private static final ExecutorService service = Executors.newFixedThreadPool(MAXIMUM_THREAD_NUMBER);
 
