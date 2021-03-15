@@ -18,12 +18,15 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
+/**
+ * @author Adam Akiva
+ * Class used to manage the FreeColumnDialog view
+ */
 public class FreeColumnDialogController extends BaseController {
 
     private final BaseModel model = BaseModel.getInstance();
 
     private final Activity callerActivity;
-
     private final FreeColumnDialog view;
 
     private final int rows;
@@ -32,6 +35,12 @@ public class FreeColumnDialogController extends BaseController {
 
     private final TextInputLayout[] textInputLayouts;
 
+    /**
+     * @param callerActivity Activity which open this dialog
+     * @param matrixValues String[] holding all the matrix values
+     * @param rows Integer holding the rows amount of the matrix
+     * @param cols Integer holding the columns amount of the matrix
+     */
     public FreeColumnDialogController(final Activity callerActivity, final String[] matrixValues,
                                       final int rows, final int cols) {
         this.callerActivity = callerActivity;
@@ -45,6 +54,10 @@ public class FreeColumnDialogController extends BaseController {
         textInputLayouts = new TextInputLayout[rows];
     }
 
+    /**
+     * @return Compound.OnCheckChangeListener which input zeroes in the rows that has no values on
+     * checked or remove zeroes on uncheck
+     */
     private CompoundButton.OnCheckedChangeListener fillEmptyInputsWithZeroesEvent() {
         return new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -58,6 +71,11 @@ public class FreeColumnDialogController extends BaseController {
         };
     }
 
+    /**
+     * @return View.OnClickListener which starts the calculation of Gauss Jordan elimination
+     * for the given matrix and free column vector. If any value is invalid display a message
+     * to the user, otherwise move to ResultActivity
+     */
     public View.OnClickListener submitFreeColumnValuesEvent() {
         return new View.OnClickListener() {
             @Override
@@ -77,11 +95,14 @@ public class FreeColumnDialogController extends BaseController {
                 } catch (NumberFormatException e) {
                     Snackbar.make(view.getRootView(), SMART_ASS, Snackbar.LENGTH_LONG).show();
                 }
-                goToResultActivity(callerActivity, ResultActivity.class, OPERATION, Calculation.GAUSS_JORDAN);
+                goToResultActivity(callerActivity, ResultActivity.class);
             }
         };
     }
 
+    /**
+     * @return View.onClickListener to close this dialog on press
+     */
     public View.OnClickListener closeDialogViewEvent() {
         return new View.OnClickListener() {
             @Override
@@ -91,19 +112,32 @@ public class FreeColumnDialogController extends BaseController {
         };
     }
 
+    /**
+     * Method to inflate free_column_input_row.xml * rows
+     */
     private void addRows() {
         view.addRowsLayout(rows);
     }
 
+    /**
+     * Method to inflate free_column_check_box_row.xml
+     */
     private void addCheckBox() {
         ViewGroup vg = view.addFillEmptyInputsWithZeroesCheckBox();
         attachCheckBoxEvent((MaterialCheckBox) vg.findViewById(R.id.cbFreeColumnFillWithZeroes));
     }
 
+    /**
+     * Method to attach an event to the CheckBox
+     * @param cbFillWithZeroes CheckBox to attach the event to
+     */
     private void attachCheckBoxEvent(MaterialCheckBox cbFillWithZeroes) {
         cbFillWithZeroes.setOnCheckedChangeListener(fillEmptyInputsWithZeroesEvent());
     }
 
+    /**
+     * Method to inflate free_column_button_row.xml
+     */
     private void addButtons() {
         ViewGroup vg = view.addButtonsLayout();
         MaterialButton btnSubmit = vg.findViewById(R.id.btnSubmit);
@@ -112,18 +146,33 @@ public class FreeColumnDialogController extends BaseController {
         attachHideKeyboardFocusChangeEvents(btnSubmit, btnCancel);
     }
 
+    /**
+     * Method to attach events to the buttons
+     * @param btnSubmit Button to submit
+     * @param btnCancel Button to cancel
+     */
     public void attachButtonEvents(MaterialButton btnSubmit, MaterialButton btnCancel) {
         btnSubmit.setOnClickListener(submitFreeColumnValuesEvent());
         btnCancel.setOnClickListener(closeDialogViewEvent());
     }
 
+    /**
+     * Method to attach hideKeyboard events to the buttons
+     * @param btnSubmit Button to submit
+     * @param btnCancel Button to cancel
+     */
     public void attachHideKeyboardFocusChangeEvents(MaterialButton btnSubmit, MaterialButton btnCancel) {
         LinearLayout root = view.findViewById(R.id.llDialogView);
         btnSubmit.setOnFocusChangeListener(buildHideKeyboardListener(root, callerActivity));
         btnCancel.setOnFocusChangeListener(buildHideKeyboardListener(root, callerActivity));
     }
 
-    private void populateEditTextArrays() {
+    /**
+     * Method which gets all the visible TextInputLayouts showed in this dialog,
+     * and put them in an array, used to get all the user inputted values for the free
+     * column vector
+     */
+    private void populateTextInputLayoutArray() {
         ViewGroup vg = view.findViewById(R.id.llDialogView);
         // Hint: currently xml structure looks like this:
         // <LinearLayout>
@@ -148,12 +197,18 @@ public class FreeColumnDialogController extends BaseController {
         }
     }
 
+    /**
+     * Method to attach hints for the EditInputText fields
+     */
     private void setHintsForTextInputEditTextFields() {
         for (int i = 0; i < textInputLayouts.length; i++) {
             textInputLayouts[i].setHint(view.getContext().getResources().getString(R.string.freeColumnCellHint, i + 1));
         }
     }
 
+    /**
+     * Method to fill empty EditInputText fields with zeroes
+     */
     private void fillEmptyInputsWithZeroes() {
         for (TextInputLayout textInputEditText : textInputLayouts) {
             if (textInputEditText.getEditText().getText().toString().equals(EMPTY_STRING)) {
@@ -162,6 +217,9 @@ public class FreeColumnDialogController extends BaseController {
         }
     }
 
+    /**
+     * Method to empty EditInputText fields with zeroes
+     */
     private void emptyInputsWithZeroes() {
         for (TextInputLayout textInputEditText : textInputLayouts) {
             if (textInputEditText.getEditText().getText().toString().equals(String.valueOf(0))) {
@@ -170,13 +228,16 @@ public class FreeColumnDialogController extends BaseController {
         }
     }
 
+    /**
+     * Called to display the dialog
+     */
     public void build() {
-        view.show();
+        view.show(); // Build the layout firstly
         // Must be called here and in this order not beforehand look at the explanation above.
-        addRows();
-        populateEditTextArrays();
-        setHintsForTextInputEditTextFields();
-        addCheckBox();
-        addButtons();
+        addRows(); // Add rows for user input
+        populateTextInputLayoutArray(); // Save the references to the created TextInputLayouts
+        setHintsForTextInputEditTextFields(); // Set hints for all the EditText fields.
+        addCheckBox(); // Add the checkBox row for filling empty cells with zeroes.
+        addButtons(); // Add the submit and cancel buttons.
     }
 }

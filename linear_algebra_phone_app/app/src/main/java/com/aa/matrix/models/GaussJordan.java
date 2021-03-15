@@ -3,15 +3,23 @@ package com.aa.matrix.models;
 import java.util.Locale;
 import java.util.concurrent.Callable;
 
+/**
+ * @author Adam Akiva
+ * Class used to calculate a Gauss Jordan elimination value of the matrix held in the model
+ */
 public class GaussJordan extends BaseModel implements Callable<Calculation> {
 
-    private static final String NO_SOLUTIONS = "No solutions" + System.lineSeparator() +
-            "(R%d is a non-true equation)" + System.lineSeparator();
     private final Matrix matrix;
     private final String freeVarName;
     private final int variables;
     private final Calculation result;
 
+    private static final String NO_SOLUTIONS = "No solutions" + System.lineSeparator() +
+            "(R%d is a non-true equation)" + System.lineSeparator();
+
+    /**
+     * @param freeVarName String how to show to the user the results, default is x
+     */
     public GaussJordan(String freeVarName) {
         this.matrix = BaseModel.getInstance().getMatrixObject();
         this.freeVarName = freeVarName;
@@ -36,6 +44,10 @@ public class GaussJordan extends BaseModel implements Callable<Calculation> {
         return result;
     }
 
+    /**
+     * @return Method used to find the result for the Gauss Jordan elimination, can be either
+     * singular solution or infinite solutions, if reached here it is assured that there's a solution
+     */
     private String findResults() {
         int numberOfSolutions = 0;
         StringBuilder resultString = new StringBuilder();
@@ -52,6 +64,10 @@ public class GaussJordan extends BaseModel implements Callable<Calculation> {
         return resultString.toString();
     }
 
+    /**
+     * Method which builds a string to display to the user of all the results for a singular solution
+     * @param resultString StringBuilder to append the results to
+     */
     private void buildSingleSolutionStringResult(StringBuilder resultString) {
         for (int i = 0; i < variables; i++) {
             String value = doubleToString(matrix.getMatrix()[i][matrix.getCols() - 1]);
@@ -59,6 +75,12 @@ public class GaussJordan extends BaseModel implements Callable<Calculation> {
         }
     }
 
+    /**
+     * Method which builds a string to display to the user of all the results for a infinite solutions
+     * @param resultString StringBuilder to append the results to
+     * @param numberOfSolutions Integer for the number of actual results to compare with the number
+     *                          of the expected results
+     */
     private void buildInfiniteSolutionsStringResult(StringBuilder resultString, int numberOfSolutions) {
         double[][] m = matrix.getMatrix();
         int cols = matrix.getCols();

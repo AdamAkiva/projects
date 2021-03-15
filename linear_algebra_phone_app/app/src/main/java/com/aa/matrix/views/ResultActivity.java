@@ -2,17 +2,20 @@ package com.aa.matrix.views;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.aa.matrix.R;
 import com.aa.matrix.controllers.ResultActivityController;
 import com.aa.matrix.models.Calculation;
 
-public class ResultActivity extends BaseActivity {
+/**
+ * @author Adam Akiva
+ */
+public class ResultActivity extends AppCompatActivity {
 
     private ProgressBar pbLoadingResult;
     private TextView tvDisplayResult;
@@ -28,29 +31,20 @@ public class ResultActivity extends BaseActivity {
         new ResultActivityController(this);
     }
 
+    /**
+     * Method to hide the progress bar from the user (when the calculation is done)
+     */
     public void hideProgressBar() {
         if (pbLoadingResult.getVisibility() == View.VISIBLE) {
             pbLoadingResult.setVisibility(View.GONE);
         }
     }
 
-    public void displayDeterminantResult(Calculation result) {
-        String textToDisplay = result.toString();
-        tvDisplayResult.setText(textToDisplay);
-    }
-
-    public void displayGaussJordanResult(Calculation result) {
-        String textToDisplay = result.toString();
-        tvDisplayResult.setText(textToDisplay);
-    }
-
-    public void displayInverseMatrixResult(Calculation result) {
-        String textToDisplay = result.toString();
-        tvDisplayResult.setText(textToDisplay);
-    }
-
-    @Override
-    public ViewGroup getRootView() {
-        return (ViewGroup) findViewById(R.id.llDisplayResults);
+    /**
+     * Method to display the result of the calculation to the user
+     * @param result Calculation Object with the steps of the calculation and the result
+     */
+    public void displayResult(Calculation result) {
+        tvDisplayResult.setText(result.toString());
     }
 }

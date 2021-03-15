@@ -1,6 +1,5 @@
 package com.aa.matrix.controllers;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -16,39 +15,57 @@ import com.aa.matrix.views.ResultActivity;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * @author Adam Akiva
+ * Class used to manage the ResultActivity view
+ */
 public class ResultActivityController extends BaseController {
 
-    private static final String TAG = ResultActivityController.class.getName();
     private final ResultActivity view;
+
+    // Shows a loading circle for the calculation time
     private final ProgressBar pbLoadingResult;
+
+    // See Calculation object for options
     private final int matrixOperation;
 
+    /**
+     * @param view ResultActivity object
+     */
     public ResultActivityController(ResultActivity view) {
         this.view = view;
         pbLoadingResult = view.findViewById(R.id.pbLoadingResult);
         this.matrixOperation = BaseModel.getInstance().getMatrixObject().getCalculationType();
         try {
             displayResult();
-        } catch (InvalidParameterException | ExecutionException | InterruptedException e) {
-            Log.d(TAG, e.getMessage() != null ? e.getMessage() : "null");
-        }
+        } catch (InvalidParameterException | ExecutionException | InterruptedException ignored) {}
     }
 
+    /**
+     * Method to display the result of the calculation to the user
+     * @throws ExecutionException If the thread threw an exception (besides interrupted)
+     * @throws InterruptedException If the thread was interrupted mid-run
+     * @throws InvalidParameterException If the user injected stuff that should not be inputted
+     */
     public void displayResult() throws ExecutionException, InterruptedException,
             InvalidParameterException {
         Calculation result = startCalculation();
         view.hideProgressBar();
-        if (matrixOperation == Calculation.DETERMINANT) {
-            view.displayDeterminantResult(result);
-        } else if (matrixOperation == Calculation.GAUSS_JORDAN) {
-            view.displayGaussJordanResult(result);
-        } else if (matrixOperation == Calculation.INVERSE_MATRIX) {
-            view.displayInverseMatrixResult(result);
+        if (matrixOperation == Calculation.DETERMINANT ||
+                matrixOperation == Calculation.GAUSS_JORDAN ||
+                matrixOperation == Calculation.INVERSE_MATRIX) {
+            view.displayResult(result);
         } else {
             throw new InvalidParameterException("Should not happen");
         }
     }
 
+    /**
+     * Method to start the correct thread for the calculation depending on button pressed
+     * @throws ExecutionException If the thread threw an exception (besides interrupted)
+     * @throws InterruptedException If the thread was interrupted mid-run
+     * @throws InvalidParameterException If the user injected stuff that should not be inputted
+     */
     private Calculation startCalculation() throws ExecutionException, InterruptedException,
             InvalidParameterException {
         Callable<Calculation> result;

@@ -3,7 +3,14 @@ package com.aa.matrix.models;
 import java.util.Locale;
 import java.util.concurrent.Callable;
 
+/**
+ * @author Adam Akiva
+ * Class used to calculate a Determinat value of the matrix held in the model
+ */
 public class Determinant extends BaseModel implements Callable<Calculation> {
+
+    private final Matrix matrix;
+    private final Calculation result;
 
     private static final String TWO_BY_TWO_MATRIX = "Used the shortcut way" + System.lineSeparator()
             + "To calculate 2x2 determinant:" + System.lineSeparator() + "(%s * %s) - (%s * %s) = %s"
@@ -14,8 +21,6 @@ public class Determinant extends BaseModel implements Callable<Calculation> {
     private static final String ZERO_VECTOR = "Row %d is a zero row" + System.lineSeparator() +
             "Therefore " + DETERMINANT + "0" + System.lineSeparator();
     private static final String MULTIPLY_BY_NEGATIVE_ONE = "-1 (from row swaps) ";
-    private final Matrix matrix;
-    private final Calculation result;
 
     public Determinant() {
         this.matrix = BaseModel.getInstance().getMatrixObject();
@@ -38,6 +43,9 @@ public class Determinant extends BaseModel implements Callable<Calculation> {
         return result;
     }
 
+    /**
+     * Method to calculate the determinant of 2X2 matrix in the shortcut way
+     */
     private void twoByTwoMatrix() {
         double[][] m = matrix.getMatrix();
         double value = (m[0][0] * (m[1][1])) - ((m[0][1] * (m[1][0])));
@@ -45,6 +53,10 @@ public class Determinant extends BaseModel implements Callable<Calculation> {
                 doubleToString(m[0][1]), doubleToString(m[1][0]), doubleToString(value)));
     }
 
+    /**
+     * Method to set the result of the calculation by multiplying the main diagonal values after
+     * the matrix is in made to be in lower echelon form
+     */
     private void calculateDeterminantValueByDiagonalLineMultiplication() {
         double res;
         int rows = matrix.getRows();
