@@ -15,6 +15,7 @@ import models.CustomerModel;
 import views.AddCustomerView;
 import views.DialogView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,8 @@ public class AddCustomerController extends BaseController implements IUserAction
     
     private final CustomerModel model; // customer model instance
     private final AddCustomerView view; // view
+    
+    File file;
     
     private Customer customer;  // used to hold the new customer created by the user
     

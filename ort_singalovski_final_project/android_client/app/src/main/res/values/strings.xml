@@ -1,0 +1,88 @@
+<resources>
+    <string name="app_name">Final Project</string>
+
+    <string name="unknownError">This should not have happened</string>
+
+    <string name="mustHaveValues">All fields must have values</string>
+    <string name="oneOrMoreFieldsIsIncorrect">One or more fields is incorrect</string>
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="submit">Submit</string>
+    <string name="signup">Sign up</string>
+
+    <string name="firstName">First name</string>
+    <string name="lastName">Last name</string>
+    <string name="belowEighteen">I confirm that my child is below 18 years old</string>
+
+    <string name="passwordRulesDesc">Clickable image for password rules</string>
+    <string name="passwordRulesTitle">Password rules:</string>
+    <string name="passwordRulesBody">1.At least one digit(0\-9)\n2.One lower case letter(a\-z)\n3.One upper case letter(A-\Z)\n4.One special character(@,#,$,%,^,&amp;,+,=)\n5.No spaces\n6.Between 8 to 20 characters</string>
+    <string name="gotIt">Got it!</string>
+
+    <string name="missingField">Can not be empty</string>
+    <string name="invalidField">Must contain %1$s</string>
+    <string name="lettersAndSpacesOnly">letters and spaces only</string>
+    <string name="validEmail">a valid email address</string>
+    <string name="validPassword">invalid password, see ! for details</string>
+
+    <string name="userWithTheSameEmailExists">A user with the same email address is already signed up</string>
+
+    <string name="tooShort">Must be at least %1$d characters long</string>
+    <string name="tooLong">Must not be over %1$d characters long</string>
+    <string name="notChecked">You must check the check-box</string>
+
+    <string name="fixErrors">Please fix the invalid fields</string>
+    <string name="noInternetConnection">Unable to load application because phone does not have internet connection</string>
+    <string name="signupError">Error signing up , %1$s please try again</string>
+    <string name="loginError">Error logging in, %1$s please try again</string>
+
+    <string name="sortBy"><b>Sort by:</b></string>
+    <string name="sortByNew"><b>New</b></string>
+    <string name="timeAndDateAlert">A non-ethical image was shown in the computer on\n %1$s\n at %2$s</string>
+    <string name="showImage">Show image</string>
+    <string name="nonEthicalImage">This is a non ethical image</string>
+
+    <string name="areYouSure">Are you sure?</string>
+    <string name="disturbingImage">The following image may be disturbing and/or non-ethical are you sure you want to view it?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <string name="logoutSuccessful">You have logged out</string>
+
+    <string name="logoutButtonDesc">Logout button</string>
+    <string name="logoutInfo">Are you sure you want to logout?</string>
+
+    <string name="homeButtonDesc">Home button</string>
+
+    <string name="deleteSuccessful">Image deleted successfully</string>
+    <string name="deleteFailed">Image deletion failed</string>
+    <string name="deleteImage">Delete</string>
+    <string name="imageDeleteInfo">This image will be deleted permanently are you sure you want to do that?</string>
+
+    <string name="loseAllInfo">All your input information will be lost are you sure?</string>
+    <string name="changesSuccessfulPleaseRelog">Data changed successfully please re-login</string>
+
+    <string name="incorrectPassword">The password you entered was incorrect</string>
+    <string name="changeInfoDialog">If your information is correct you will be logged-out and need to login again are you sure you want to continue?</string>
+    <string name="passwordsDoNotMatch">Passwords do not match</string>
+
+    <string name="confirmPassword">Confirm password</string>
+    <string name="oldPassword">Old password</string>
+    <string name="updateProfileButton">Update profile button</string>
+
+    <string name="channelName">newImageChannel</string>
+    <string name="channelDesc">Channel to display new images notifications</string>
+
+    <string name="newImageTitle">Final Project</string>
+    <string name="newImageText">You have %1$d new images to view in your profile</string>
+
+    <string name="settingsButtonDesc">Settings Button</string>
+
+    <string name="activeNotifications">Notifications</string>
+    <string name="save">Save</string>
+
+    <string name="didNotPressSave">You did not press the save button are you sure you want to continue?</string>
+    <string name="settingsSaveFailed">Cannot save settings because phone does not have internet connection</string>
+
+</resources>

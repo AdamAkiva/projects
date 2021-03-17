@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolBar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/lightBlue"
+    android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:clickable="true"
+            android:contentDescription="@string/logoutButtonDesc"
+            android:focusable="true"
+            android:src="@drawable/ic_logout" />
+
+        <ImageView
+            android:id="@+id/ivSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:clickable="true"
+            android:layout_toStartOf="@id/ivLogout"
+            android:contentDescription="@string/settingsButtonDesc"
+            android:focusable="true"
+            android:src="@drawable/ic_settings" />
+
+        <ImageView
+            android:id="@+id/ivHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_toStartOf="@id/ivSettings"
+            android:clickable="true"
+            android:contentDescription="@string/homeButtonDesc"
+            android:focusable="true"
+            android:src="@drawable/ic_home" />
+
+        <ImageView
+            android:id="@+id/ivUpdateProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_toStartOf="@id/ivHome"
+            android:clickable="true"
+            android:contentDescription="@string/updateProfileButton"
+            android:focusable="true"
+            android:src="@drawable/ic_update_profile" />
+
+        <LinearLayout
+            android:id="@+id/llSort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3.5dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:text="@string/sortBy"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSortByNew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20sp"
+                android:text="@string/sortByNew"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.Toolbar>
