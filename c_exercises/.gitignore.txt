@@ -1,0 +1,5 @@
+/*/objects/
+.vscode/
+*.exe
+Makefile
+
