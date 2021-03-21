@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 void print_integer_array(int* arr, int size)
 {
     for (int i = 0; i < size; i++)
     {
-        printf("%d", arr[i]);
+        printf("%d ", arr[i]);
     }
     printf("\n");
 }
@@ -64,8 +65,8 @@ void array_reverse(int* arr, int size)
 {
     for (int i = 0; i < size / 2; i++)
     {
-        int t = arr[size - 1];
-        arr[size - 1] = arr[i];
+        int t = arr[size - 1 - i];
+        arr[size - 1 - i] = arr[i];
         arr[i] = t;
     }
 }
@@ -82,8 +83,8 @@ int array_max_value(int* arr, int size)
 void array_max_3_values(int* arr, int size, int* max, int max_size)
 {
     if (size <= 3) return;
-    for (int i = 0; i < max_size; i++) max[i] = 0;
-    for (int i = 1; i < size; i++)
+    for (int i = 0; i < max_size; i++) max[i] = INT_MIN;
+    for (int i = 0; i < size; i++)
     {
         if (arr[i] > max[0])
         {
@@ -115,7 +116,7 @@ int array_min_value(int* arr, int size)
 void array_min_3_values(int* arr, int size, int* min, int min_size)
 {
     if (size <= 3) return;
-    for (int i = 0; i < min_size; i++) min[i] = 0;
+    for (int i = 0; i < min_size; i++) min[i] = INT_MAX;
     for (int i = 0; i < size; i++)
     {
         if (arr[i] < min[0])
@@ -136,7 +137,7 @@ void array_min_3_values(int* arr, int size, int* min, int min_size)
     }
 }
 
-void array_remove_value(int* arr, int size, int value)
+int array_remove_value(int* arr, int size, int value)
 {
     int counter = 0;
     for (int i = 0; i < size; i++)
@@ -148,6 +149,7 @@ void array_remove_value(int* arr, int size, int value)
         }
     }
     arr = (int*) realloc(arr, sizeof(int) * (size - counter));
+    return size - counter;
 }
 
 void selection_sort(int* arr, int size)

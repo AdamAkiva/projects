@@ -24,18 +24,12 @@ int subtract_numbers(int a, int b)
 
 int multiply_numbers(int a, int b)
 {
-    int res = 0;
-    if (a < b)
+    int res = 0, count = 0;
+    while (b)
     {
-        int t = a;
-        a = b;
-        b = t;
-    }
-    while (b != 0)
-    {
-        if (b & 1) res += a;
-        a <<= 1;
-        b >>= 1; 
+        if (b % 2 == 1) res += a << count;
+        count++;
+        b /= 2;
     }
     return res;
 }

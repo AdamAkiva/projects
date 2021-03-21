@@ -6,5 +6,6 @@ int main()
     check_bits();
     check_pointers();
     check_etc();
+    check_string();
     return 0;
 }

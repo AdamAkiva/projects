@@ -7,10 +7,10 @@ float power(int base, int exponent)
 {
     if (base == 0) return 0;
     if (exponent == 0) return 1;
-    int exp = exponent < 0 ? exponent *= -1 : exponent; 
+    int exp = exponent < 0 ? exponent * -1 : exponent; 
     int res = 1;
     for (int i = 0; i < exp; i++) res *= base;
-    return exponent < 0 ? 1 / res : res;
+    return exponent < 0 ? 1.0 / res : res;
 }
 
 void find_primes_up_to(int limit)
@@ -30,22 +30,22 @@ void find_primes_up_to(int limit)
             }
         }
     }
-    for (int i = 0; i <= limit; i++)
+    for (int i = 2; i <= limit; i++)
     {
         if (temp[i] == '1')
         {
             printf("%d ", i);
         }
     }
+    printf("\n");
 }
 
 void find_fibonacci_up_to(int limit)
 {
     int f1 = 0, f2 = 1, f3 = 1;
-    printf("0, 1");
-    while (f3 <= limit)
+    while (f1 <= limit)
     {
-        printf(" %d ", f1);
+        printf(" %d", f1);
         f1 = f2;
         f2 = f3;
         f3 = f1 + f2;
