@@ -88,13 +88,14 @@ void check_bits()
 void check_pointers()
 {
     int x, y;
+    int* pX = &x, *pY = &y;
     printf("Please enter two numbers: ");
     scanf("%d %d", &x, &y);
-    printf("Before swap: %d %d\n", x, y);
-    swap_pointers(&x, &y, sizeof(int));
-    printf("After swap: %d %d\n", x, y);
-    swap_integer_values(&x, &y);
-    printf("After swap: %d %d\n", x, y);
+    printf("Before swap: %d %d\n", *pX, *pY);
+    swap_pointers((void**) &pX, (void**) &pY);
+    printf("After first swap: %d %d\n", *pX, *pY);
+    swap_integer_values(pX, pY);
+    printf("After second swap: %d %d\n", *pX, *pY);
 }
 
 void check_etc()
