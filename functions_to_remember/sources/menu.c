@@ -53,18 +53,11 @@ void check_arrays()
     array_reverse(res, size3);
     print_integer_array(res, size3);
 
-    int size4 = 3;
-    int* temp = (int*) malloc(sizeof(int) * size4);
-
     printf("Max value: %d\n", array_max_value(res, size3));
-    printf("3 max values in the array: ");
-    array_max_3_values(res, size3, temp, size4);
-    print_integer_array(temp, size4);
+    printf("Third max value in the array: %d\n", array_max_third_value(res, size3));
 
     printf("Min value: %d\n", array_min_value(res, size3));
-    printf("3 min values in the array: ");
-    array_min_3_values(res, size3, temp, size4);
-    print_integer_array(temp, size4);
+    printf("Third min value in the array: %d\n", array_min_third_value(res, size3));
 
     int remove;
     printf("Please enter a value to remove from the array: ");
@@ -73,6 +66,8 @@ void check_arrays()
 
     printf("Array after removal: ");
     print_integer_array(res, size3);
+
+    free(res);
 }
 
 void check_bits()
@@ -100,20 +95,31 @@ void check_pointers()
 
 void check_etc()
 {
-    int base, exponent, limit;
+    int base, exponent, limit, n;
     printf("Please enter a base and an exponent: ");
     scanf("%d %d", &base, &exponent);
     printf("%d^%d = %f\n", base, exponent, power(base, exponent));
     printf("Please enter up to where you want to print prime numbers: ");
     scanf("%d", &limit);
-    find_primes_up_to(limit);
+    char* temp = find_primes_up_to(limit);
+    for (int i = 2; i <= limit; i++)
+        if (temp[i] == '1') printf("%d ", i);
+    printf("\n");
     printf("Please enter up to where you want to print fibonacci sequence: ");
     scanf("%d", &limit);
-    find_fibonacci_up_to(limit);
+    int* res = find_fibonacci_up_to(limit, &n);
+    print_integer_array(res, n);
+    printf("Please enter the amount of elements of fibonacci sequence you want to display: ");
+    scanf("%d", &n);
+    res = number_of_elements_for_fibonacci(n);
+    print_integer_array(res, n);
+    free(res);
+    free(temp);
 }
 
 void check_string()
 {
+    _flushall();
     char str[255];
     printf("Please enter a string: ");
     gets(str);

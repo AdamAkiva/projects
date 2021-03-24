@@ -1,35 +1,41 @@
 #include "../headers/bits.h"
 
-int add_numbers(int a, int b)
+// Params: x - integer, y - integer
+// Retrun: x + y using bitwise operators
+int add_numbers(int x, int y)
 {
-    while (b != 0)
+    while (y != 0)
     {
-        int carry = a & b;  
-        a = a ^ b; 
-        b = carry << 1;
+        int carry = x & y;  
+        x = x ^ y; 
+        y = carry << 1;
     }
-    return a;
+    return x;
 }
 
-int subtract_numbers(int a, int b)
+// Params: x - integer, y - integer
+// Retrun: x - y using bitwise operators
+int subtract_numbers(int x, int y)
 {
-     while (b != 0)
+     while (y != 0)
     {
-        int borrow = (~a) & b;
-        a = a ^ b;
-        b = borrow << 1;
+        int borrow = (~x) & y;
+        x = x ^ y;
+        y = borrow << 1;
     }
-    return a;
+    return x;
 }
 
-int multiply_numbers(int a, int b)
+// Params: x - integer, y - integer
+// Retrun: x * y using bitwise operators
+int multiply_numbers(int x, int y)
 {
     int res = 0;
-    while (b != 0)
+    while (y != 0)
     {
-        if (b & 1) res = add_numbers(res, a);
-        a <<= 1;
-        b >>= 1;
+        if (y & 1) res = add_numbers(res, x);
+        x <<= 1;
+        y >>= 1;
     }
     return res;
 }

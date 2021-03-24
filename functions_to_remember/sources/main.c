@@ -2,10 +2,10 @@
 
 int main()
 {
-    //check_arrays();
-    //check_bits();
+    check_arrays();
+    check_bits();
     check_pointers();
-    //check_etc();
-    //check_string();
+    check_etc();
+    check_string();
     return 0;
 }

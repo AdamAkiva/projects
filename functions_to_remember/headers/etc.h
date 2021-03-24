@@ -1,8 +1,9 @@
 #ifndef __ETC__
 #define __ETC__
 
-float power(int base, int exponent);
-void find_primes_up_to(int limit);
-void find_fibonacci_up_to(int limit);
+float power(int, int);
+char* find_primes_up_to(int);
+int* find_fibonacci_up_to(int, int*);
+int* number_of_elements_for_fibonacci(int);
 
 #endif

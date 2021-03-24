@@ -3,17 +3,22 @@
 
 #include "../headers/etc.h"
 
+// Params: base - integer, exponent - integer
+// Return: float for x^y (float incase of negative exponent)
 float power(int base, int exponent)
 {
     if (base == 0) return 0;
-    if (exponent == 0) return 1;
+    if (exponent == 0 || base == 1) return 1;
+    if (base == -1) return exponent % 2 == 0 ? 1 : -1;
     int exp = exponent < 0 ? exponent * -1 : exponent; 
-    int res = 1;
-    for (int i = 0; i < exp; i++) res *= base;
+    int res = base;
+    for (int i = 1; i < exp; i++) res *= base;
     return exponent < 0 ? 1.0 / res : res;
 }
 
-void find_primes_up_to(int limit)
+// Params: limit - integer for the upper limit of primes
+// Return: char[] sized limit + 1, char[i] == '1': number is prime, char[i] == '0': number is not prime
+char* find_primes_up_to(int limit)
 {
     char* temp = malloc(sizeof(char) * (limit + 1));
     for (int i = 0; i <= limit; i++)
@@ -30,25 +35,40 @@ void find_primes_up_to(int limit)
             }
         }
     }
-    for (int i = 2; i <= limit; i++)
-    {
-        if (temp[i] == '1')
-        {
-            printf("%d ", i);
-        }
-    }
-    printf("\n");
+    return temp;
 }
 
-void find_fibonacci_up_to(int limit)
+// Params: limit - integer for the upper limit of fibonacci sequence,
+// size - pointer to an integer for  the number of elements in the array
+// Return: integer[] with values
+int* find_fibonacci_up_to(int limit, int* size)
 {
-    int f1 = 0, f2 = 1, f3 = 1;
+    int* res = (int*) malloc(0);
+    int f1 = 0, f2 = 1, f3 = 1, n = 0;
     while (f1 <= limit)
     {
-        printf(" %d", f1);
+        res = (int*) realloc(res, sizeof(int) * (n + 1));
+        res[n++] = f1;
         f1 = f2;
         f2 = f3;
         f3 = f1 + f2;
     }
-    printf("\n");
+    *size = n;
+    return res;
+}
+
+// Params: n - integer for the number of elements
+// Return: integer[] with values
+int* number_of_elements_for_fibonacci(int n)
+{
+    int* res = (int*) malloc(sizeof(int) * n);
+    int f1 = 0, f2 = 1, f3 = 1;
+    for (int i = 0; i < n; i++)
+    {
+        res[i] = f1;
+        f1 = f2;
+        f2 = f3;
+        f3 = f1 + f2;
+    }
+    return res;
 }

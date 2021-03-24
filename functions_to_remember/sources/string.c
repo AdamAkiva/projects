@@ -1,5 +1,7 @@
 #include "../headers/string.h"
 
+// Params: str - char[]
+// Reverse given char[]
 void string_reverse(char* str)
 {
     int size = 0;
@@ -17,6 +19,9 @@ void string_reverse(char* str)
     }
 }
 
+// Params: str- char[]
+// Count the amount of words in the char[]
+// Return: integer holding the number of words in the string
 int string_count_words(char* str)
 {
     int count = 0, flag = 0; // flag for if the word started with space
@@ -48,6 +53,8 @@ int string_count_words(char* str)
     return count;
 }
 
+// Params: str - char[]
+// Uppercases all letters in the string
 void string_to_uppercase(char* str)
 {
     while (*str != '\0')
@@ -57,6 +64,8 @@ void string_to_uppercase(char* str)
     }
 }
 
+// Params: str - char[]
+// Lowercases all letters in the string
 void string_to_lowercase(char* str)
 {
     while (*str != '\0')
