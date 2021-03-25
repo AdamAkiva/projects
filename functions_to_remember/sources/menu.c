@@ -95,10 +95,11 @@ void check_pointers()
 
 void check_etc()
 {
-    int base, exponent, limit, n;
+    float base;
+    int exponent, limit, n;
     printf("Please enter a base and an exponent: ");
-    scanf("%d %d", &base, &exponent);
-    printf("%d^%d = %f\n", base, exponent, power(base, exponent));
+    scanf("%f %d", &base, &exponent);
+    printf("%f^%d = %f\n", base, exponent, power(base, exponent));
     printf("Please enter up to where you want to print prime numbers: ");
     scanf("%d", &limit);
     char* temp = find_primes_up_to(limit);

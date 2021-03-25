@@ -5,15 +5,22 @@
 
 // Params: base - integer, exponent - integer
 // Return: float for x^y (float incase of negative exponent)
-float power(int base, int exponent)
+float power(float base, int exponent)
 {
-    if (base == 0) return 0;
-    if (exponent == 0 || base == 1) return 1;
-    if (base == -1) return exponent % 2 == 0 ? 1 : -1;
-    int exp = exponent < 0 ? exponent * -1 : exponent; 
-    int res = base;
-    for (int i = 1; i < exp; i++) res *= base;
-    return exponent < 0 ? 1.0 / res : res;
+    float res = base;
+    
+    if (exponent < 0)
+    {
+        exponent *= -1;
+        res = 1.0 / res;
+    }
+    
+    for (int i = 1; i < exponent; i++)
+    {
+        res = res * base;
+    }
+    
+    return res;
 }
 
 // Params: limit - integer for the upper limit of primes
